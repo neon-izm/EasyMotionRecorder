@@ -22,32 +22,32 @@ namespace Entum
     [DefaultExecutionOrder(31000)]
     public class MotionDataRecorder : MonoBehaviour
     {
-        [SerializeField] KeyCode recordStartKey = KeyCode.R;
+        [SerializeField] KeyCode _recordStartKey = KeyCode.R;
 
-        [SerializeField] KeyCode recordStopKey = KeyCode.X;
+        [SerializeField] KeyCode _recordStopKey = KeyCode.X;
 
         /// <summary>
         /// 対象のアニメーター
         /// </summary>
-        [SerializeField] Animator animator;
+        [SerializeField] Animator _animator;
 
-        [SerializeField] bool Recording = false;
-        [SerializeField] int frameIndex = 0;
+        [SerializeField] bool _recording = false;
+        [SerializeField] int _frameIndex = 0;
 
         [SerializeField] [Tooltip("普段はOBJECTROOTで問題ないです。特殊な機材の場合は変更してください")]
-        MotionDataSettings.ROOTBONESYSTEM rootBoneSystem = MotionDataSettings.ROOTBONESYSTEM.OBJECTROOT;
+        MotionDataSettings.Rootbonesystem _rootBoneSystem = MotionDataSettings.Rootbonesystem.Objectroot;
 
         [SerializeField] [Tooltip("rootBoneSystemがOBJECTROOTの時は使われないパラメータです。")]
-        HumanBodyBones targetRootBone = HumanBodyBones.Hips;
+        HumanBodyBones _targetRootBone = HumanBodyBones.Hips;
 
 
-        float recordedTime = 0;
+        float _recordedTime = 0;
 
-        HumanPose currentPose;
+        HumanPose _currentPose;
 
-        HumanPoseHandler poseHandler = null;
-        HumanoidPoses poses = null;
-        Action OnRecordEnd;
+        HumanPoseHandler _poseHandler = null;
+        HumanoidPoses _poses = null;
+        Action _onRecordEnd;
 
      
 
@@ -84,28 +84,28 @@ namespace Entum
         // Use this for initialization
         void Awake()
         {
-            if (animator == null)
+            if (_animator == null)
             {
                 Debug.LogError("MotionDataRecorderにanimatorがセットされていません。MotionDataRecorderを削除します。");
                 Destroy(this);
             }
 
-            poseHandler = new HumanPoseHandler(animator.avatar, animator.transform);
+            _poseHandler = new HumanPoseHandler(_animator.avatar, _animator.transform);
         }
 
-        // <summary>
+        /// <summary>
         /// 録画開始
         /// </summary>
         public void RecordStart()
         {
-            if (Recording == false)
+            if (_recording == false)
             {
-                frameIndex = 0;
-                recordedTime = 0;
-                poses = ScriptableObject.CreateInstance<HumanoidPoses>();
+                _frameIndex = 0;
+                _recordedTime = 0;
+                _poses = ScriptableObject.CreateInstance<HumanoidPoses>();
 
-                OnRecordEnd += WriteAnimationFile;
-                Recording = true;
+                _onRecordEnd += WriteAnimationFile;
+                _recording = true;
             }
         }
 
@@ -115,10 +115,10 @@ namespace Entum
 
             string path = AssetDatabase.GenerateUniqueAssetPath(
                 "Assets/Resources/RecordMotion_" + DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss") + ".asset");
-            AssetDatabase.CreateAsset(poses, path);
+            AssetDatabase.CreateAsset(_poses, path);
             AssetDatabase.Refresh();
-            frameIndex = 0;
-            recordedTime = 0;
+            _frameIndex = 0;
+            _recordedTime = 0;
         }
 
         /// <summary>
@@ -126,26 +126,26 @@ namespace Entum
         /// </summary>
         public void RecordEnd()
         {
-            if (Recording)
+            if (_recording)
             {
-                if (OnRecordEnd != null)
+                if (_onRecordEnd != null)
                 {
-                    OnRecordEnd();
-                    OnRecordEnd = null;
+                    _onRecordEnd();
+                    _onRecordEnd = null;
                 }
 
-                Recording = false;
+                _recording = false;
             }
         }
 
         void Update()
         {
-            if (Input.GetKeyDown(recordStartKey))
+            if (Input.GetKeyDown(_recordStartKey))
             {
                 RecordStart();
             }
 
-            if (Input.GetKeyDown(recordStopKey))
+            if (Input.GetKeyDown(_recordStopKey))
             {
                 RecordEnd();
             }
@@ -154,47 +154,47 @@ namespace Entum
         // Update is called once per frame
         void LateUpdate()
         {
-            if (Recording)
+            if (_recording)
             {
-                recordedTime += Time.deltaTime;
+                _recordedTime += Time.deltaTime;
                 //現在のフレームのHumanoidの姿勢を取得
-                poseHandler.GetHumanPose(ref currentPose);
+                _poseHandler.GetHumanPose(ref _currentPose);
                 //posesに取得した姿勢を書き込む
                 var serializedPose = new HumanoidPoses.SerializeHumanoidPose();
 
-                if (rootBoneSystem == MotionDataSettings.ROOTBONESYSTEM.OBJECTROOT)
+                if (_rootBoneSystem == MotionDataSettings.Rootbonesystem.Objectroot)
                 {
-                    serializedPose.bodyRootPosition = animator.transform.localPosition;
-                    serializedPose.bodyRootRotation = animator.transform.localRotation;
+                    serializedPose.BodyRootPosition = _animator.transform.localPosition;
+                    serializedPose.BodyRootRotation = _animator.transform.localRotation;
                 }
-                else if (rootBoneSystem == MotionDataSettings.ROOTBONESYSTEM.HIPBONE)
+                else if (_rootBoneSystem == MotionDataSettings.Rootbonesystem.Hipbone)
                 {
-                    serializedPose.bodyRootPosition = animator.GetBoneTransform(targetRootBone).position;
-                    serializedPose.bodyRootRotation = animator.GetBoneTransform(targetRootBone).rotation;
-                    Debug.LogWarning(animator.GetBoneTransform(targetRootBone).position);
+                    serializedPose.BodyRootPosition = _animator.GetBoneTransform(_targetRootBone).position;
+                    serializedPose.BodyRootRotation = _animator.GetBoneTransform(_targetRootBone).rotation;
+                    Debug.LogWarning(_animator.GetBoneTransform(_targetRootBone).position);
                 }
                 else
                 {
                     Debug.LogWarning("enum not set");
                 }
 
-                serializedPose.bodyPosition = currentPose.bodyPosition;
-                serializedPose.bodyRotation = currentPose.bodyRotation;
-                serializedPose.frameCount = frameIndex;
-                serializedPose.muscles = new float[currentPose.muscles.Length];
-                serializedPose.frameCount = frameIndex;
-                serializedPose.time = recordedTime;
-                for (int i = 0; i < serializedPose.muscles.Length; i++)
+                serializedPose.BodyPosition = _currentPose.bodyPosition;
+                serializedPose.BodyRotation = _currentPose.bodyRotation;
+                serializedPose.FrameCount = _frameIndex;
+                serializedPose.Muscles = new float[_currentPose.muscles.Length];
+                serializedPose.FrameCount = _frameIndex;
+                serializedPose.Time = _recordedTime;
+                for (int i = 0; i < serializedPose.Muscles.Length; i++)
                 {
-                    serializedPose.muscles[i] = currentPose.muscles[i];
+                    serializedPose.Muscles[i] = _currentPose.muscles[i];
                 }
 
                 
-                SetHumanBoneTransformToHumanoidPoses(animator, ref serializedPose);
+                SetHumanBoneTransformToHumanoidPoses(_animator, ref serializedPose);
                 
 
-                poses.poses.Add(serializedPose);
-                frameIndex++;
+                _poses.Poses.Add(serializedPose);
+                _frameIndex++;
             }
         }
     }

@@ -20,48 +20,48 @@ namespace Entum
     [DefaultExecutionOrder(11000)]
     public class MotionDataPlayer : MonoBehaviour
     {
-        [SerializeField] KeyCode playStartKey = KeyCode.S;
-        [SerializeField] KeyCode playStopKey = KeyCode.T;
+        [SerializeField] KeyCode _playStartKey = KeyCode.S;
+        [SerializeField] KeyCode _playStopKey = KeyCode.T;
 
-        [SerializeField] HumanoidPoses recordedMotionData;
+        [SerializeField] HumanoidPoses _recordedMotionData;
 
-        [SerializeField] Animator animator;
+        [SerializeField] Animator _animator;
 
-        HumanPoseHandler poseHandler;
+        HumanPoseHandler _poseHandler;
 
-        System.Action OnPlayFinish;
+        System.Action _onPlayFinish;
 
         [SerializeField] [Tooltip("再生開始フレームを指定します。0だとファイル先頭から開始です")]
-        int startFrame = 0;
+        int _startFrame = 0;
 
-        [SerializeField] bool Playing = false;
-        [SerializeField] int frameIndex = 0;
+        [SerializeField] bool _playing = false;
+        [SerializeField] int _frameIndex = 0;
 
         [SerializeField] [Tooltip("普段はOBJECTROOTで問題ないです。特殊な機材の場合は変更してください")]
-        MotionDataSettings.ROOTBONESYSTEM rootBoneSystem = MotionDataSettings.ROOTBONESYSTEM.OBJECTROOT;
+        MotionDataSettings.Rootbonesystem _rootBoneSystem = MotionDataSettings.Rootbonesystem.Objectroot;
 
         [SerializeField] [Tooltip("rootBoneSystemがOBJECTROOTの時は使われないパラメータです。")]
-        HumanBodyBones targetRootBone = HumanBodyBones.Hips;
+        HumanBodyBones _targetRootBone = HumanBodyBones.Hips;
 
 
-        float playingTime = 0;
+        float _playingTime = 0;
 
         /// <summary>
         /// モーションデータ再生開始
         /// </summary>
         public void PlayMotion()
         {
-            if (Playing == false)
+            if (_playing == false)
             {
-                if (recordedMotionData == null)
+                if (_recordedMotionData == null)
                 {
                     Debug.LogError("録画済みモーションデータが指定されていません。再生を行いません。");
                 }
                 else
                 {
-                    playingTime = startFrame * (Time.deltaTime / 1f);
-                    frameIndex = startFrame;
-                    Playing = true;
+                    _playingTime = _startFrame * (Time.deltaTime / 1f);
+                    _frameIndex = _startFrame;
+                    _playing = true;
                 }
             }
         }
@@ -71,11 +71,11 @@ namespace Entum
         /// </summary>
         public void StopMotion()
         {
-            if (Playing)
+            if (_playing)
             {
-                playingTime = 0;
-                frameIndex = startFrame;
-                Playing = false;
+                _playingTime = 0;
+                _frameIndex = _startFrame;
+                _playing = false;
             }
         }
 
@@ -83,38 +83,38 @@ namespace Entum
         void SetHumanPose(int frame)
         {
             var pose = new HumanPose();
-            pose.muscles = recordedMotionData.poses[frameIndex].muscles;
-            poseHandler.SetHumanPose(ref pose);
-            pose.bodyPosition = recordedMotionData.poses[frameIndex].bodyPosition;
-            pose.bodyRotation = recordedMotionData.poses[frameIndex].bodyRotation;
+            pose.muscles = _recordedMotionData.Poses[_frameIndex].Muscles;
+            _poseHandler.SetHumanPose(ref pose);
+            pose.bodyPosition = _recordedMotionData.Poses[_frameIndex].BodyPosition;
+            pose.bodyRotation = _recordedMotionData.Poses[_frameIndex].BodyRotation;
 
-            if (rootBoneSystem == MotionDataSettings.ROOTBONESYSTEM.OBJECTROOT)
+            if (_rootBoneSystem == MotionDataSettings.Rootbonesystem.Objectroot)
             {
                 //animator.transform.localPosition = recordedMotionData.poses[frameIndex].bodyRootPosition;
                 //animator.transform.localRotation = recordedMotionData.poses[frameIndex].bodyRootRotation;
             }
-            else if (rootBoneSystem == MotionDataSettings.ROOTBONESYSTEM.HIPBONE)
+            else if (_rootBoneSystem == MotionDataSettings.Rootbonesystem.Hipbone)
             {
-                pose.bodyPosition = recordedMotionData.poses[frameIndex].bodyPosition;
-                pose.bodyRotation = recordedMotionData.poses[frameIndex].bodyRotation;
+                pose.bodyPosition = _recordedMotionData.Poses[_frameIndex].BodyPosition;
+                pose.bodyRotation = _recordedMotionData.Poses[_frameIndex].BodyRotation;
 
-                animator.GetBoneTransform(targetRootBone).position =
-                    recordedMotionData.poses[frameIndex].bodyRootPosition;
-                animator.GetBoneTransform(targetRootBone).rotation =
-                    recordedMotionData.poses[frameIndex].bodyRootRotation;
+                _animator.GetBoneTransform(_targetRootBone).position =
+                    _recordedMotionData.Poses[_frameIndex].BodyRootPosition;
+                _animator.GetBoneTransform(_targetRootBone).rotation =
+                    _recordedMotionData.Poses[_frameIndex].BodyRootRotation;
             }
 
             //処理落ちしたモーションデータの再生速度調整
-            if (playingTime > recordedMotionData.poses[frameIndex].time)
+            if (_playingTime > _recordedMotionData.Poses[_frameIndex].Time)
             {
-                frameIndex++;
+                _frameIndex++;
             }
 
-            if (frameIndex == recordedMotionData.poses.Count - 1)
+            if (_frameIndex == _recordedMotionData.Poses.Count - 1)
             {
-                if (OnPlayFinish != null)
+                if (_onPlayFinish != null)
                 {
-                    OnPlayFinish();
+                    _onPlayFinish();
                 }
             }
         }
@@ -122,25 +122,25 @@ namespace Entum
 
         void Awake()
         {
-            if (animator == null)
+            if (_animator == null)
             {
                 Debug.LogError("MotionDataPlayerにanimatorがセットされていません。MotionDataPlayerを削除します。");
                 Destroy(this);
             }
 
-            poseHandler = new HumanPoseHandler(animator.avatar, (animator.transform));
-            OnPlayFinish += StopMotion;
+            _poseHandler = new HumanPoseHandler(_animator.avatar, (_animator.transform));
+            _onPlayFinish += StopMotion;
         }
 
         // Update is called once per frame
         void Update()
         {
-            if (Input.GetKeyDown(playStartKey))
+            if (Input.GetKeyDown(_playStartKey))
             {
                 PlayMotion();
             }
 
-            if (Input.GetKeyDown(playStopKey))
+            if (Input.GetKeyDown(_playStopKey))
             {
                 StopMotion();
             }
@@ -148,9 +148,9 @@ namespace Entum
 
         private void LateUpdate()
         {
-            if (!Playing) return;
-            playingTime += Time.deltaTime;
-            SetHumanPose(frameIndex);
+            if (!_playing) return;
+            _playingTime += Time.deltaTime;
+            SetHumanPose(_frameIndex);
         }
     }
 }

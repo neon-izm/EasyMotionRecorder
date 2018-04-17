@@ -17,10 +17,10 @@ namespace Entum
     [System.Serializable]
     public class MotionDataSettings
     {
-        public enum ROOTBONESYSTEM
+        public enum Rootbonesystem
         {
-            HIPBONE,
-            OBJECTROOT
+            Hipbone,
+            Objectroot
         }
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace Entum
             var clip = new AnimationClip {frameRate = 30,};
             AnimationUtility.SetAnimationClipSettings(clip, new AnimationClipSettings() {loopTime = false,});
 
-            var bones = poses[0].humanoidBones;
+            var bones = Poses[0].humanoidBones;
             for (int i = 0; i < bones.Count; i++)
             {
                 var positionCurveX = new AnimationCurve();
@@ -94,15 +94,15 @@ namespace Entum
                 var rotationCurveZ = new AnimationCurve();
                 var rotationCurveW = new AnimationCurve();
 
-                foreach (var p in poses)
+                foreach (var p in Poses)
                 {
-                    positionCurveX.AddKey(p.time, p.humanoidBones[i].localPosition.x);
-                    positionCurveY.AddKey(p.time, p.humanoidBones[i].localPosition.y);
-                    positionCurveZ.AddKey(p.time, p.humanoidBones[i].localPosition.z);
-                    rotationCurveX.AddKey(p.time, p.humanoidBones[i].localRotation.x);
-                    rotationCurveY.AddKey(p.time, p.humanoidBones[i].localRotation.y);
-                    rotationCurveZ.AddKey(p.time, p.humanoidBones[i].localRotation.z);
-                    rotationCurveW.AddKey(p.time, p.humanoidBones[i].localRotation.w);
+                    positionCurveX.AddKey(p.Time, p.humanoidBones[i].LocalPosition.x);
+                    positionCurveY.AddKey(p.Time, p.humanoidBones[i].LocalPosition.y);
+                    positionCurveZ.AddKey(p.Time, p.humanoidBones[i].LocalPosition.z);
+                    rotationCurveX.AddKey(p.Time, p.humanoidBones[i].LocalRotation.x);
+                    rotationCurveY.AddKey(p.Time, p.humanoidBones[i].LocalRotation.y);
+                    rotationCurveZ.AddKey(p.Time, p.humanoidBones[i].LocalRotation.z);
+                    rotationCurveW.AddKey(p.Time, p.humanoidBones[i].LocalRotation.w);
                 }
 
                 //pathは階層
@@ -110,21 +110,21 @@ namespace Entum
                 AnimationUtility.SetEditorCurve(clip,
                     new EditorCurveBinding()
                     {
-                        path = poses[0].humanoidBones[i].name,
+                        path = Poses[0].humanoidBones[i].Name,
                         type = typeof(Transform),
                         propertyName = "m_LocalPosition.x"
                     }, positionCurveX);
                 AnimationUtility.SetEditorCurve(clip,
                     new EditorCurveBinding()
                     {
-                        path = poses[0].humanoidBones[i].name,
+                        path = Poses[0].humanoidBones[i].Name,
                         type = typeof(Transform),
                         propertyName = "m_LocalPosition.y"
                     }, positionCurveY);
                 AnimationUtility.SetEditorCurve(clip,
                     new EditorCurveBinding()
                     {
-                        path = poses[0].humanoidBones[i].name,
+                        path = Poses[0].humanoidBones[i].Name,
                         type = typeof(Transform),
                         propertyName = "m_LocalPosition.z"
                     }, positionCurveZ);
@@ -132,28 +132,28 @@ namespace Entum
                 AnimationUtility.SetEditorCurve(clip,
                     new EditorCurveBinding()
                     {
-                        path = poses[0].humanoidBones[i].name,
+                        path = Poses[0].humanoidBones[i].Name,
                         type = typeof(Transform),
                         propertyName = "m_LocalRotation.x"
                     }, rotationCurveX);
                 AnimationUtility.SetEditorCurve(clip,
                     new EditorCurveBinding()
                     {
-                        path = poses[0].humanoidBones[i].name,
+                        path = Poses[0].humanoidBones[i].Name,
                         type = typeof(Transform),
                         propertyName = "m_LocalRotation.y"
                     }, rotationCurveY);
                 AnimationUtility.SetEditorCurve(clip,
                     new EditorCurveBinding()
                     {
-                        path = poses[0].humanoidBones[i].name,
+                        path = Poses[0].humanoidBones[i].Name,
                         type = typeof(Transform),
                         propertyName = "m_LocalRotation.z"
                     }, rotationCurveZ);
                 AnimationUtility.SetEditorCurve(clip,
                     new EditorCurveBinding()
                     {
-                        path = poses[0].humanoidBones[i].name,
+                        path = Poses[0].humanoidBones[i].Name,
                         type = typeof(Transform),
                         propertyName = "m_LocalRotation.w"
                     }, rotationCurveW);
@@ -181,11 +181,11 @@ namespace Entum
                 var curveX = new AnimationCurve();
                 var curveY = new AnimationCurve();
                 var curveZ = new AnimationCurve();
-                foreach (var item in poses)
+                foreach (var item in Poses)
                 {
-                    curveX.AddKey(item.time, item.bodyPosition.x);
-                    curveY.AddKey(item.time, item.bodyPosition.y);
-                    curveZ.AddKey(item.time, item.bodyPosition.z);
+                    curveX.AddKey(item.Time, item.BodyPosition.x);
+                    curveY.AddKey(item.Time, item.BodyPosition.y);
+                    curveZ.AddKey(item.Time, item.BodyPosition.z);
                 }
 
                 const string muscleX = "RootT.x";
@@ -202,12 +202,12 @@ namespace Entum
                 var curveY = new AnimationCurve();
                 var curveZ = new AnimationCurve();
                 var curveW = new AnimationCurve();
-                foreach (var item in poses)
+                foreach (var item in Poses)
                 {
-                    curveX.AddKey(item.time, item.bodyRotation.x);
-                    curveY.AddKey(item.time, item.bodyRotation.y);
-                    curveZ.AddKey(item.time, item.bodyRotation.z);
-                    curveW.AddKey(item.time, item.bodyRotation.w);
+                    curveX.AddKey(item.Time, item.BodyRotation.x);
+                    curveY.AddKey(item.Time, item.BodyRotation.y);
+                    curveZ.AddKey(item.Time, item.BodyRotation.z);
+                    curveW.AddKey(item.Time, item.BodyRotation.w);
                 }
 
                 const string muscleX = "RootQ.x";
@@ -224,9 +224,9 @@ namespace Entum
             for (int i = 0; i < HumanTrait.MuscleCount; ++i)
             {
                 var curve = new AnimationCurve();
-                foreach (var item in poses)
+                foreach (var item in Poses)
                 {
-                    curve.AddKey(item.time, item.muscles[i]);
+                    curve.AddKey(item.Time, item.Muscles[i]);
                 }
 
                 var muscle = HumanTrait.MuscleName[i];
@@ -252,26 +252,26 @@ namespace Entum
         [System.SerializableAttribute]
         public class SerializeHumanoidPose
         {
-            public Vector3 bodyRootPosition;
-            public Quaternion bodyRootRotation;
+            public Vector3 BodyRootPosition;
+            public Quaternion BodyRootRotation;
 
-            public Vector3 bodyPosition;
-            public Quaternion bodyRotation;
+            public Vector3 BodyPosition;
+            public Quaternion BodyRotation;
 
-            public float[] muscles;
+            public float[] Muscles;
 
             //フレーム数
-            public int frameCount;
+            public int FrameCount;
 
             //記録開始後の経過時間。処理落ち対策
-            public float time;
+            public float Time;
 
             [System.Serializable]
             public class HumanoidBone
             {
-                public string name;
-                public Vector3 localPosition;
-                public Quaternion localRotation;
+                public string Name;
+                public Vector3 LocalPosition;
+                public Quaternion LocalRotation;
 
                 private static string BuildRelativePath(Transform root, Transform target)
                 {
@@ -292,16 +292,16 @@ namespace Entum
 
                 public void Set(Transform root, Transform t)
                 {
-                    name = BuildRelativePath(root, t);
+                    Name = BuildRelativePath(root, t);
 
-                    localPosition = t.localPosition;
-                    localRotation = t.localRotation;
+                    LocalPosition = t.localPosition;
+                    LocalRotation = t.localRotation;
                 }
             }
 
             public List<HumanoidBone> humanoidBones = new List<HumanoidBone>();
         }
 
-        public List<SerializeHumanoidPose> poses = new List<SerializeHumanoidPose>();
+        public List<SerializeHumanoidPose> Poses = new List<SerializeHumanoidPose>();
     }
 }
