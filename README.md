@@ -4,8 +4,8 @@ Unityエディタ上でVRIKなどのモーションキャプチャをしたHuman
 
 
 # 使い方
-EasyMotionRecorder.unitypackageだけをプロジェクトにインポートしてください。
-ダウンロードリンクはこちら
+EasyMotionRecorder.unitypackageだけをプロジェクトにインポートしてください。  
+ダウンロードリンクはこちら  
 https://github.com/duo-inc/EasyMotionRecorder/blob/master/EasyMotionRecorder/EasyMotionRecorder.unitypackage
 
 ## Setup手順
