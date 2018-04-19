@@ -189,11 +189,11 @@ namespace Entum
                 }
 
                 const string muscleX = "RootT.x";
-                clip.SetCurve(null, typeof(Animator), muscleX, curveX);
+                clip.SetCurve("", typeof(Animator), muscleX, curveX);
                 const string muscleY = "RootT.y";
-                clip.SetCurve(null, typeof(Animator), muscleY, curveY);
+                clip.SetCurve("", typeof(Animator), muscleY, curveY);
                 const string muscleZ = "RootT.z";
-                clip.SetCurve(null, typeof(Animator), muscleZ, curveZ);
+                clip.SetCurve("", typeof(Animator), muscleZ, curveZ);
             }
 
             // rotation
@@ -211,13 +211,13 @@ namespace Entum
                 }
 
                 const string muscleX = "RootQ.x";
-                clip.SetCurve(null, typeof(Animator), muscleX, curveX);
+                clip.SetCurve("", typeof(Animator), muscleX, curveX);
                 const string muscleY = "RootQ.y";
-                clip.SetCurve(null, typeof(Animator), muscleY, curveY);
+                clip.SetCurve("", typeof(Animator), muscleY, curveY);
                 const string muscleZ = "RootQ.z";
-                clip.SetCurve(null, typeof(Animator), muscleZ, curveZ);
+                clip.SetCurve("", typeof(Animator), muscleZ, curveZ);
                 const string muscleW = "RootQ.w";
-                clip.SetCurve(null, typeof(Animator), muscleW, curveW);
+                clip.SetCurve("", typeof(Animator), muscleW, curveW);
             }
 
             // muscles
@@ -235,7 +235,7 @@ namespace Entum
                     muscle = MotionDataSettings.TraitPropMap[muscle];
                 }
 
-                clip.SetCurve(null, typeof(Animator), muscle, curve);
+                clip.SetCurve("", typeof(Animator), muscle, curve);
             }
 
             clip.EnsureQuaternionContinuity();
