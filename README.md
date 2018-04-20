@@ -6,7 +6,7 @@ Unityエディタ上でVRIKなどのモーションキャプチャをしたHuman
 # 使い方
 EasyMotionRecorder.unitypackageだけをプロジェクトにインポートしてください。  
 ダウンロードリンクはこちら  
-https://github.com/duo-inc/EasyMotionRecorder/blob/master/EasyMotionRecorder/EasyMotionRecorder.unitypackage
+https://github.com/duo-inc/EasyMotionRecorder/raw/master/EasyMotionRecorder/EasyMotionRecorder.unitypackage
 
 ## Setup手順
 0. モーションキャプチャ対象のキャラクターをHumanoidにしておく。OculusTouchやViveコントローラ、（あるいはAxisNeuronやKinect）の動きがエディタ上で反映されているシーンをセットアップする。
