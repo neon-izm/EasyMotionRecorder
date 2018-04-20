@@ -114,7 +114,7 @@ namespace Entum
             SafeCreateDirectory("Assets/Resources");
 
             string path = AssetDatabase.GenerateUniqueAssetPath(
-                "Assets/Resources/RecordMotion_" + _animator.name + DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss") +
+                "Assets/Resources/RecordMotion_" + _animator.name + DateTime.Now.ToString("_yyyy_MM_dd_HH_mm_ss") +
                 ".asset");
             AssetDatabase.CreateAsset(_poses, path);
             AssetDatabase.Refresh();
