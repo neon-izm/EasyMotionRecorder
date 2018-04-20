@@ -25,7 +25,8 @@ https://github.com/duo-inc/EasyMotionRecorder/blob/master/EasyMotionRecorder/Eas
 モーション記録して生成されたRecordMotion_2018~~~ みたいなファイルを選択してインスペクタ上で右クリックして、「Export as humanoid animation clip」を選ぶとAnimationClipに変換されます。
 変換後のAnimationClipはHumanoid準拠のモーションとしてMecanimAnimatorやUnityTimeline上で扱うことが出来ます。
 
-もし床にキャラクターが沈んでしまう場合はHumanoidのAnimationClipにあるRoot Transform Position(Y)をBased Upon：Originalに変更して下さい。
+もし床にキャラクターが沈んでしまう場合はHumanoidのAnimationClipにあるRoot Transform Position(Y)をBased Upon：Originalに変更して下さい。  
+![export_gif](./doc_image/emrec_export_humanoid.gif)
 
 # FAQ
 - 使っているとUnityが重い→ごめんなさい。録画中の処理負荷は多少増えます。
