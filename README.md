@@ -34,13 +34,15 @@ https://github.com/duo-inc/EasyMotionRecorder/raw/master/EasyMotionRecorder/Easy
 - 長時間記録しているとUnityが落ちた→素朴な実装を行っているため、記録中は常にメモリを食い続けます。もし長時間の記録が必要であれば、メモリの増設をお勧めします。10分そこらなら大丈夫です。
 - モーションを再生しているときにスカートや髪がヒラヒラしない→ スクリプトの実行順を変更して下さい。SpringBoneやDynamicBone（MMD4mecanimを使っている場合はBulletPhisicsImpl)など、揺れモノを処理しているスクリプトのScript Execution Orderを20000以上に設定して下さい。(https://docs.unity3d.com/jp/530/Manual/class-ScriptExecution.html)
 - 再生開始フレームを指定したい→MotionDataPlayer内のstartFrameで再生開始フレーム指定が可能です。
+- セットアップの説明が分かりにくい→申し訳ないです。 https://twitter.com/entum_info/status/986823609329926146 こちらにセットアップ手順の動画がありますので参照ください。
 
 # Known Issue
 - VRIK使用時、キャラクターの立ち位置がズレることがある →VRIKの処理順による問題です。再生開始時の位置を変更することで暫定対処可能です。
 - その他要望はgithub issueに登録お願いします。
 
 # 動作環境
-Unity 5.6.5p2 64bit (Windows)のエディタ上で動作確認をしています。
+Unity 5.6.5p2 64bit (Windows)のエディタ上で動作確認をしています。Unity5.6~ Unity2018.1betaでの動作実績があります。
+公式にはVRIKをサポートしますが、Kinectや各種モーションキャプチャーシステムでの動作も（無保証ですが）動作実績があります。
 
 
 This software is released under the MIT License, see LICENSE.txt.
