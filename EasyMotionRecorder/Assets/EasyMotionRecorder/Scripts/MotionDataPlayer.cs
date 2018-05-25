@@ -23,7 +23,7 @@ namespace Entum
         [SerializeField] KeyCode _playStartKey = KeyCode.S;
         [SerializeField] KeyCode _playStopKey = KeyCode.T;
 
-        [SerializeField] HumanoidPoses _recordedMotionData;
+        [SerializeField] protected HumanoidPoses _recordedMotionData;
 
         [SerializeField] Animator _animator;
 

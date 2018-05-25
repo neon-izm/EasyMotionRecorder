@@ -9,7 +9,9 @@ http://opensource.org/licenses/mit-license.php
 
 using UnityEngine;
 using System;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using System.IO;
 
 namespace Entum
@@ -32,7 +34,7 @@ namespace Entum
         [SerializeField] Animator _animator;
 
         [SerializeField] bool _recording = false;
-        [SerializeField] int _frameIndex = 0;
+        [SerializeField] protected int _frameIndex = 0;
 
         [SerializeField] [Tooltip("普段はOBJECTROOTで問題ないです。特殊な機材の場合は変更してください")]
         MotionDataSettings.Rootbonesystem _rootBoneSystem = MotionDataSettings.Rootbonesystem.Objectroot;
@@ -41,12 +43,12 @@ namespace Entum
         HumanBodyBones _targetRootBone = HumanBodyBones.Hips;
 
 
-        float _recordedTime = 0;
+        protected float _recordedTime = 0;
 
         HumanPose _currentPose;
 
         HumanPoseHandler _poseHandler = null;
-        HumanoidPoses _poses = null;
+        protected HumanoidPoses _poses = null;
         Action _onRecordEnd;
 
      
@@ -109,17 +111,19 @@ namespace Entum
             }
         }
 
-        void WriteAnimationFile()
+        protected virtual void WriteAnimationFile()
         {
+#if UNITY_EDITOR
             SafeCreateDirectory("Assets/Resources");
 
             string path = AssetDatabase.GenerateUniqueAssetPath(
-                "Assets/Resources/RecordMotion_" + _animator.name + DateTime.Now.ToString("_yyyy_MM_dd_HH_mm_ss") +
+                "Assets/Resources/RecordMotion_" + _animator.name + DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss") +
                 ".asset");
             AssetDatabase.CreateAsset(_poses, path);
             AssetDatabase.Refresh();
             _frameIndex = 0;
             _recordedTime = 0;
+#endif
         }
 
         /// <summary>
