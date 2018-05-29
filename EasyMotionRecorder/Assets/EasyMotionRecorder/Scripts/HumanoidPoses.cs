@@ -9,8 +9,11 @@ http://opensource.org/licenses/mit-license.php
 
 using System.Collections.Generic;
 using UnityEngine;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using System;
+using System.Text;
 
 namespace Entum
 {
@@ -76,6 +79,8 @@ namespace Entum
     /// </summary>
     public class HumanoidPoses : ScriptableObject
     {
+
+#if UNITY_EDITOR
         //Genericなanimファイルとして出力する。
         [ContextMenu("Export as generic animation clips")]
         public void ExportgenericAnim()
@@ -247,6 +252,7 @@ namespace Entum
 
             return;
         }
+#endif
 
 
         [System.SerializableAttribute]
@@ -300,6 +306,98 @@ namespace Entum
             }
 
             public List<HumanoidBone> humanoidBones = new List<HumanoidBone>();
+
+            //CSVシリアライズ
+            public string SerializeCSV()
+            {
+                System.Text.StringBuilder sb = new System.Text.StringBuilder();
+                SerializeVector3(sb, BodyRootPosition);
+                SerializeQuaternion(sb, BodyRootRotation);
+                SerializeVector3(sb, BodyPosition);
+                SerializeQuaternion(sb, BodyRotation);
+                for (int i = 0; i < Muscles.Length; i++)
+                {
+                    sb.Append(Muscles[i]);
+                    sb.Append(",");
+                }
+                sb.Append(FrameCount);
+                sb.Append(",");
+                sb.Append(Time);
+                sb.Append(",");
+                for (int i = 0; i < humanoidBones.Count; i++)
+                {
+                    sb.Append(humanoidBones[i].Name);
+                    sb.Append(",");
+                    SerializeVector3(sb,humanoidBones[i].LocalPosition);
+                    SerializeQuaternion(sb,humanoidBones[i].LocalRotation);
+                }
+                sb.Length = sb.Length - 1; //最後のカンマ削除
+                return sb.ToString();
+            }
+
+            void SerializeVector3(StringBuilder sb, Vector3 vec)
+            {
+                sb.Append(vec.x);
+                sb.Append(",");
+                sb.Append(vec.y);
+                sb.Append(",");
+                sb.Append(vec.z);
+                sb.Append(",");
+            }
+
+            void SerializeQuaternion(StringBuilder sb, Quaternion q)
+            {
+                sb.Append(q.x);
+                sb.Append(",");
+                sb.Append(q.y);
+                sb.Append(",");
+                sb.Append(q.z);
+                sb.Append(",");
+                sb.Append(q.w);
+                sb.Append(",");
+            }
+
+            //CSVデシリアライズ
+            public void DeserializeCSV(string str)
+            {
+                string[] dataString = str.Split(',');
+                BodyRootPosition = DeserializeVector3(dataString, 0);
+                BodyRootRotation = DeserializeQuaternion(dataString, 3);
+                BodyPosition = DeserializeVector3(dataString, 7);
+                BodyRotation = DeserializeQuaternion(dataString, 10);
+                Muscles = new float[HumanTrait.MuscleCount];
+                for (int i = 0; i < HumanTrait.MuscleCount; i++)
+                {
+                    Muscles[i] = float.Parse(dataString[i + 14]);
+                }
+                FrameCount = int.Parse(dataString[14 + HumanTrait.MuscleCount]);
+                Time = float.Parse(dataString[15 + HumanTrait.MuscleCount]);
+                var boneValues = HumanBodyBones.GetValues(typeof(HumanBodyBones)) as HumanBodyBones[];
+                for (int i = 0; i < boneValues.Length; i++)
+                {
+                    int startIndex = 16 + HumanTrait.MuscleCount + (i * 8);
+                    if (dataString.Length <= startIndex)
+                    {
+                        break;
+                    }
+
+                    HumanoidBone bone = new HumanoidBone();
+                    bone.Name = dataString[startIndex];
+                    bone.LocalPosition = DeserializeVector3(dataString, startIndex + 1);
+                    bone.LocalRotation = DeserializeQuaternion(dataString, startIndex + 4);
+                }
+            }
+
+            Vector3 DeserializeVector3(string[] str, int startIndex)
+            {
+                return new Vector3(float.Parse(str[startIndex]), float.Parse(str[startIndex + 1]), float.Parse(str[startIndex + 2]));
+            }
+
+            Quaternion DeserializeQuaternion(string[] str, int startIndex)
+            {
+                return new Quaternion(float.Parse(str[startIndex]), float.Parse(str[startIndex + 1]), float.Parse(str[startIndex + 2]), float.Parse(str[startIndex+3]));
+            }
+
         }
 
         public List<SerializeHumanoidPose> Poses = new List<SerializeHumanoidPose>();
