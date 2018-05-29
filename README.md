@@ -35,6 +35,7 @@ https://github.com/duo-inc/EasyMotionRecorder/raw/master/EasyMotionRecorder/Easy
 - モーションを再生しているときにスカートや髪がヒラヒラしない→ スクリプトの実行順を変更して下さい。SpringBoneやDynamicBone（MMD4mecanimを使っている場合はBulletPhisicsImpl)など、揺れモノを処理しているスクリプトのScript Execution Orderを20000以上に設定して下さい。(https://docs.unity3d.com/jp/530/Manual/class-ScriptExecution.html)
 - 再生開始フレームを指定したい→MotionDataPlayer内のstartFrameで再生開始フレーム指定が可能です。
 - セットアップの説明が分かりにくい→申し訳ないです。 https://twitter.com/entum_info/status/986823609329926146 こちらにセットアップ手順の動画がありますので参照ください。
+- ビルドしたバイナリ上でモーションを記録したい場合は MotionDataPlayerCSV.cs などのcsv周りを参照してください
 
 # Known Issue
 - VRIK使用時、キャラクターの立ち位置がズレることがある →VRIKの処理順による問題です。再生開始時の位置を変更することで暫定対処可能です。
