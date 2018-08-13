@@ -189,7 +189,6 @@ namespace Entum
                 serializedPose.BodyRotation = _currentPose.bodyRotation;
                 serializedPose.FrameCount = _frameIndex;
                 serializedPose.Muscles = new float[_currentPose.muscles.Length];
-                serializedPose.FrameCount = _frameIndex;
                 serializedPose.Time = _recordedTime;
                 for (int i = 0; i < serializedPose.Muscles.Length; i++)
                 {
