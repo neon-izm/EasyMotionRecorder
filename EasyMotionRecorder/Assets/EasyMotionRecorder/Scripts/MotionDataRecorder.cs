@@ -58,6 +58,8 @@ namespace Entum
             HumanBodyBones[] values = HumanBodyBones.GetValues(typeof(HumanBodyBones)) as HumanBodyBones[];
             foreach (HumanBodyBones b in values)
             {
+                if (b < 0 || b >= HumanBodyBones.LastBone) { continue; }
+
                 Transform t = animator.GetBoneTransform(b);
                 if (t != null )
                 {
