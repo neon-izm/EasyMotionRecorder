@@ -80,7 +80,7 @@ namespace Entum
         }
 
 
-        void SetHumanPose(int frame)
+        void SetHumanPose()
         {
             var pose = new HumanPose();
             pose.muscles = _recordedMotionData.Poses[_frameIndex].Muscles;
@@ -150,7 +150,7 @@ namespace Entum
         {
             if (!_playing) return;
             _playingTime += Time.deltaTime;
-            SetHumanPose(_frameIndex);
+            SetHumanPose();
         }
     }
 }
