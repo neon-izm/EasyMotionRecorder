@@ -83,7 +83,7 @@ namespace Entum
 #if UNITY_EDITOR
         //Genericなanimファイルとして出力する。
         [ContextMenu("Export as generic animation clips")]
-        public void ExportgenericAnim()
+        public void ExportGenericAnim()
         {
             var clip = new AnimationClip {frameRate = 30,};
             AnimationUtility.SetAnimationClipSettings(clip, new AnimationClipSettings() {loopTime = false,});

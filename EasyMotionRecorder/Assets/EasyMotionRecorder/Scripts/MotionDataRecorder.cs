@@ -58,6 +58,8 @@ namespace Entum
             HumanBodyBones[] values = HumanBodyBones.GetValues(typeof(HumanBodyBones)) as HumanBodyBones[];
             foreach (HumanBodyBones b in values)
             {
+                if (b < 0 || b >= HumanBodyBones.LastBone) { continue; }
+
                 Transform t = animator.GetBoneTransform(b);
                 if (t != null )
                 {
@@ -187,7 +189,6 @@ namespace Entum
                 serializedPose.BodyRotation = _currentPose.bodyRotation;
                 serializedPose.FrameCount = _frameIndex;
                 serializedPose.Muscles = new float[_currentPose.muscles.Length];
-                serializedPose.FrameCount = _frameIndex;
                 serializedPose.Time = _recordedTime;
                 for (int i = 0; i < serializedPose.Muscles.Length; i++)
                 {
