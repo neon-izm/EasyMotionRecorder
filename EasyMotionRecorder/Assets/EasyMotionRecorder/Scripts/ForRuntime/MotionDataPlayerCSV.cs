@@ -41,7 +41,6 @@ namespace Entum
             {
                 fs = new FileStream(motionDataPath, FileMode.Open);
                 sr = new StreamReader(fs);
-                string[] tickString = sr.ReadLine().Split(',');
 
                 while (sr.Peek() > -1)
                 {
