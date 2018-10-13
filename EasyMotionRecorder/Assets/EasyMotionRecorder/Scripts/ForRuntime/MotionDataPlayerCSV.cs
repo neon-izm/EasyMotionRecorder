@@ -1,29 +1,42 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿/**
+[EasyMotionRecorder]
+
+Copyright (c) 2018 Duo.inc
+
+This software is released under the MIT License.
+http://opensource.org/licenses/mit-license.php
+*/
+
 using UnityEngine;
 using System.IO;
 
-//CSVに吐かれたモーションデータを再生する
 namespace Entum
 {
+    /// <summary>
+    /// CSVに吐かれたモーションデータを再生する
+    /// </summary>
     public class MotionDataPlayerCSV : MotionDataPlayer
     {
-        public string RecordedDirectory;//スラッシュで終わる形で
-        public string RecordedFileName;//拡張子も
+        [SerializeField, Tooltip("スラッシュで終わる形で")]
+        private string _recordedDirectory;
+
+        [SerializeField, Tooltip("拡張子も")]
+        private string _recordedFileName;
 
         // Use this for initialization
-        void Start()
+        private void Start()
         {
-            if (string.IsNullOrEmpty(RecordedDirectory))
+            if (string.IsNullOrEmpty(_recordedDirectory))
             {
-                RecordedDirectory = Application.streamingAssetsPath + "/";
+                _recordedDirectory = Application.streamingAssetsPath + "/";
             }
-            string motionCSVPath = RecordedDirectory + RecordedFileName;
+
+            string motionCSVPath = _recordedDirectory + _recordedFileName;
             LoadCSVData(motionCSVPath);
         }
 
         //CSVから_recordedMotionDataを作る
-        public void LoadCSVData(string motionDataPath)
+        private void LoadCSVData(string motionDataPath)
         {
             //ファイルが存在しなければ終了
             if (!File.Exists(motionDataPath))
@@ -31,7 +44,8 @@ namespace Entum
                 return;
             }
 
-            _recordedMotionData = new HumanoidPoses();
+
+            RecordedMotionData = ScriptableObject.CreateInstance<HumanoidPoses>();
 
             FileStream fs = null;
             StreamReader sr = null;
@@ -45,11 +59,11 @@ namespace Entum
                 while (sr.Peek() > -1)
                 {
                     string line = sr.ReadLine();
-                    HumanoidPoses.SerializeHumanoidPose seriHumanPose = new HumanoidPoses.SerializeHumanoidPose();
+                    var seriHumanPose = new HumanoidPoses.SerializeHumanoidPose();
                     if (line != "")
                     {
                         seriHumanPose.DeserializeCSV(line);
-                        _recordedMotionData.Poses.Add(seriHumanPose);
+                        RecordedMotionData.Poses.Add(seriHumanPose);
                     }
                 }
                 sr.Close();
@@ -61,12 +75,16 @@ namespace Entum
             {
                 Debug.LogError("ファイル読み込み失敗！" + e.Message + e.StackTrace);
             }
+
             if (sr != null)
-            { sr.Close(); }
+            {
+                sr.Close();
+            }
+
             if (fs != null)
-            { fs.Close(); }
+            {
+                fs.Close();
+            }
         }
     }
-
-    
 }

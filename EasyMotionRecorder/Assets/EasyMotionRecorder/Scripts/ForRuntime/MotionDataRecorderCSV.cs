@@ -20,14 +20,16 @@ namespace Entum
     [DefaultExecutionOrder(31000)]
     public class MotionDataRecorderCSV : MotionDataRecorder
     {
-        public string OutputDirectory;//スラッシュで終わる形で
-        public string OutputFileName;//拡張子も
+        [SerializeField, Tooltip("スラッシュで終わる形で")]
+        private string _outputDirectory;
+
+        [SerializeField, Tooltip("拡張子も")]
+        private string _outputFileName;
 
         protected override void WriteAnimationFile()
         {
-
             //ファイルオープン
-            string directoryStr = OutputDirectory;
+            string directoryStr = _outputDirectory;
             if (directoryStr == "")
             {
                 //自動設定ディレクトリ
@@ -38,16 +40,18 @@ namespace Entum
                     Directory.CreateDirectory(directoryStr);
                 }
             }
-            string fileNameStr = OutputFileName;
+
+            string fileNameStr = _outputFileName;
             if (fileNameStr == "")
             {
                 //自動設定ファイル名
-                fileNameStr = "motion_" + System.DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss") + ".csv";
+                fileNameStr = string.Format("motion_{0:yyyy_MM_dd_HH_mm_ss}.csv", DateTime.Now);
             }
+
             FileStream fs = new FileStream(directoryStr + fileNameStr, FileMode.Create);
             StreamWriter sw = new StreamWriter(fs);
 
-            foreach (var pose in _poses.Poses)
+            foreach (var pose in Poses.Poses)
             {
                 string seriStr = pose.SerializeCSV();
                 sw.WriteLine(seriStr);
@@ -56,33 +60,32 @@ namespace Entum
             //ファイルクローズ
             try
             {
-                if (sw != null)
-                {
-                    sw.Close();
-                }
-
-                if (fs != null)
-                {
-                    fs.Close();
-                }
+                sw.Close();
+                fs.Close();
                 sw = null;
                 fs = null;
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
                 Debug.LogError("ファイル書き出し失敗！" + e.Message + e.StackTrace);
             }
+
             if (sw != null)
-            { sw.Close(); }
+            {
+                sw.Close();
+            }
+
             if (fs != null)
-            { fs.Close(); }
+            {
+                fs.Close();
+            }
 
 #if UNITY_EDITOR
             UnityEditor.AssetDatabase.Refresh();
 #endif
 
-            _frameIndex = 0;
-            _recordedTime = 0;
+            RecordedTime = 0f;
+            FrameIndex = 0;
         }
     }
 }

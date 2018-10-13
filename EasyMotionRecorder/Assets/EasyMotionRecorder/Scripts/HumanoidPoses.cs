@@ -1,4 +1,4 @@
-/**
+﻿/**
 [EasyMotionRecorder]
 
 Copyright (c) 2018 Duo.inc
@@ -7,17 +7,17 @@ This software is released under the MIT License.
 http://opensource.org/licenses/mit-license.php
 */
 
-using System.Collections.Generic;
 using UnityEngine;
+using System;
+using System.Text;
+using System.Collections.Generic;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
-using System;
-using System.Text;
 
 namespace Entum
 {
-    [System.Serializable]
+    [Serializable]
     public class MotionDataSettings
     {
         public enum Rootbonesystem
@@ -79,16 +79,15 @@ namespace Entum
     /// </summary>
     public class HumanoidPoses : ScriptableObject
     {
-
 #if UNITY_EDITOR
-        //Genericなanimファイルとして出力する。
-        [ContextMenu("Export as generic animation clips")]
+        //Genericなanimファイルとして出力する
+        [ContextMenu("Export as Generic animation clips")]
         public void ExportGenericAnim()
         {
-            var clip = new AnimationClip {frameRate = 30,};
-            AnimationUtility.SetAnimationClipSettings(clip, new AnimationClipSettings() {loopTime = false,});
+            var clip = new AnimationClip { frameRate = 30 };
+            AnimationUtility.SetAnimationClipSettings(clip, new AnimationClipSettings { loopTime = false });
 
-            var bones = Poses[0].humanoidBones;
+            var bones = Poses[0].HumanoidBones;
             for (int i = 0; i < bones.Count; i++)
             {
                 var positionCurveX = new AnimationCurve();
@@ -101,84 +100,84 @@ namespace Entum
 
                 foreach (var p in Poses)
                 {
-                    positionCurveX.AddKey(p.Time, p.humanoidBones[i].LocalPosition.x);
-                    positionCurveY.AddKey(p.Time, p.humanoidBones[i].LocalPosition.y);
-                    positionCurveZ.AddKey(p.Time, p.humanoidBones[i].LocalPosition.z);
-                    rotationCurveX.AddKey(p.Time, p.humanoidBones[i].LocalRotation.x);
-                    rotationCurveY.AddKey(p.Time, p.humanoidBones[i].LocalRotation.y);
-                    rotationCurveZ.AddKey(p.Time, p.humanoidBones[i].LocalRotation.z);
-                    rotationCurveW.AddKey(p.Time, p.humanoidBones[i].LocalRotation.w);
+                    positionCurveX.AddKey(p.Time, p.HumanoidBones[i].LocalPosition.x);
+                    positionCurveY.AddKey(p.Time, p.HumanoidBones[i].LocalPosition.y);
+                    positionCurveZ.AddKey(p.Time, p.HumanoidBones[i].LocalPosition.z);
+                    rotationCurveX.AddKey(p.Time, p.HumanoidBones[i].LocalRotation.x);
+                    rotationCurveY.AddKey(p.Time, p.HumanoidBones[i].LocalRotation.y);
+                    rotationCurveZ.AddKey(p.Time, p.HumanoidBones[i].LocalRotation.z);
+                    rotationCurveW.AddKey(p.Time, p.HumanoidBones[i].LocalRotation.w);
                 }
 
                 //pathは階層
                 //http://mebiustos.hatenablog.com/entry/2015/09/16/230000
                 AnimationUtility.SetEditorCurve(clip,
-                    new EditorCurveBinding()
+                    new EditorCurveBinding
                     {
-                        path = Poses[0].humanoidBones[i].Name,
+                        path = Poses[0].HumanoidBones[i].Name,
                         type = typeof(Transform),
                         propertyName = "m_LocalPosition.x"
                     }, positionCurveX);
                 AnimationUtility.SetEditorCurve(clip,
-                    new EditorCurveBinding()
+                    new EditorCurveBinding
                     {
-                        path = Poses[0].humanoidBones[i].Name,
+                        path = Poses[0].HumanoidBones[i].Name,
                         type = typeof(Transform),
                         propertyName = "m_LocalPosition.y"
                     }, positionCurveY);
                 AnimationUtility.SetEditorCurve(clip,
-                    new EditorCurveBinding()
+                    new EditorCurveBinding
                     {
-                        path = Poses[0].humanoidBones[i].Name,
+                        path = Poses[0].HumanoidBones[i].Name,
                         type = typeof(Transform),
                         propertyName = "m_LocalPosition.z"
                     }, positionCurveZ);
 
                 AnimationUtility.SetEditorCurve(clip,
-                    new EditorCurveBinding()
+                    new EditorCurveBinding
                     {
-                        path = Poses[0].humanoidBones[i].Name,
+                        path = Poses[0].HumanoidBones[i].Name,
                         type = typeof(Transform),
                         propertyName = "m_LocalRotation.x"
                     }, rotationCurveX);
                 AnimationUtility.SetEditorCurve(clip,
-                    new EditorCurveBinding()
+                    new EditorCurveBinding
                     {
-                        path = Poses[0].humanoidBones[i].Name,
+                        path = Poses[0].HumanoidBones[i].Name,
                         type = typeof(Transform),
                         propertyName = "m_LocalRotation.y"
                     }, rotationCurveY);
                 AnimationUtility.SetEditorCurve(clip,
-                    new EditorCurveBinding()
+                    new EditorCurveBinding
                     {
-                        path = Poses[0].humanoidBones[i].Name,
+                        path = Poses[0].HumanoidBones[i].Name,
                         type = typeof(Transform),
                         propertyName = "m_LocalRotation.z"
                     }, rotationCurveZ);
                 AnimationUtility.SetEditorCurve(clip,
-                    new EditorCurveBinding()
+                    new EditorCurveBinding
                     {
-                        path = Poses[0].humanoidBones[i].Name,
+                        path = Poses[0].HumanoidBones[i].Name,
                         type = typeof(Transform),
                         propertyName = "m_LocalRotation.w"
                     }, rotationCurveW);
             }
 
             clip.EnsureQuaternionContinuity();
-            string path = AssetDatabase.GenerateUniqueAssetPath(
-                "Assets/Resources/RecordMotion_" + DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss") + "_Generic.anim");
 
-            AssetDatabase.CreateAsset(clip, path);
+            var path = string.Format("Assets/Resources/RecordMotion_{0:yyyy_MM_dd_HH_mm_ss}_Generic.anim", DateTime.Now);
+            var uniqueAssetPath = AssetDatabase.GenerateUniqueAssetPath(path);
+
+            AssetDatabase.CreateAsset(clip, uniqueAssetPath);
             AssetDatabase.SaveAssets();
-            return;
         }
 
         //Humanoidなanimファイルとして出力する。
         [ContextMenu("Export as Humanoid animation clips")]
         public void ExportHumanoidAnim()
         {
-            var clip = new AnimationClip {frameRate = 30,};
-            AnimationUtility.SetAnimationClipSettings(clip, new AnimationClipSettings() {loopTime = false,});
+            var clip = new AnimationClip { frameRate = 30 };
+            AnimationUtility.SetAnimationClipSettings(clip, new AnimationClipSettings { loopTime = false });
 
 
             // position
@@ -226,7 +225,7 @@ namespace Entum
             }
 
             // muscles
-            for (int i = 0; i < HumanTrait.MuscleCount; ++i)
+            for (int i = 0; i < HumanTrait.MuscleCount; i++)
             {
                 var curve = new AnimationCurve();
                 foreach (var item in Poses)
@@ -244,18 +243,16 @@ namespace Entum
             }
 
             clip.EnsureQuaternionContinuity();
-            string path = AssetDatabase.GenerateUniqueAssetPath(
-                "Assets/Resources/RecordMotion_" + DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss") + "_Humanoid.anim");
 
-            AssetDatabase.CreateAsset(clip, path);
+            var path = string.Format("Assets/Resources/RecordMotion_{0:yyyy_MM_dd_HH_mm_ss}_Humanoid.anim", DateTime.Now);
+            var uniqueAssetPath = AssetDatabase.GenerateUniqueAssetPath(path);
+
+            AssetDatabase.CreateAsset(clip, uniqueAssetPath);
             AssetDatabase.SaveAssets();
-
-            return;
         }
 #endif
 
-
-        [System.SerializableAttribute]
+        [Serializable]
         public class SerializeHumanoidPose
         {
             public Vector3 BodyRootPosition;
@@ -272,7 +269,7 @@ namespace Entum
             //記録開始後の経過時間。処理落ち対策
             public float Time;
 
-            [System.Serializable]
+            [Serializable]
             public class HumanoidBone
             {
                 public string Name;
@@ -285,7 +282,7 @@ namespace Entum
                     var current = target;
                     while (true)
                     {
-                        if (current == null) throw new System.Exception(target.name + "は" + root.name + "の子ではありません");
+                        if (current == null) throw new Exception(target.name + "は" + root.name + "の子ではありません");
                         if (current == root) break;
 
                         path = (path == "") ? current.name : current.name + "/" + path;
@@ -305,37 +302,37 @@ namespace Entum
                 }
             }
 
-            public List<HumanoidBone> humanoidBones = new List<HumanoidBone>();
+            public List<HumanoidBone> HumanoidBones = new List<HumanoidBone>();
 
             //CSVシリアライズ
             public string SerializeCSV()
             {
-                System.Text.StringBuilder sb = new System.Text.StringBuilder();
+                StringBuilder sb = new StringBuilder();
                 SerializeVector3(sb, BodyRootPosition);
                 SerializeQuaternion(sb, BodyRootRotation);
                 SerializeVector3(sb, BodyPosition);
                 SerializeQuaternion(sb, BodyRotation);
-                for (int i = 0; i < Muscles.Length; i++)
+                foreach (var muscle in Muscles)
                 {
-                    sb.Append(Muscles[i]);
+                    sb.Append(muscle);
                     sb.Append(",");
                 }
                 sb.Append(FrameCount);
                 sb.Append(",");
                 sb.Append(Time);
                 sb.Append(",");
-                for (int i = 0; i < humanoidBones.Count; i++)
+                foreach (var humanoidBone in HumanoidBones)
                 {
-                    sb.Append(humanoidBones[i].Name);
+                    sb.Append(humanoidBone.Name);
                     sb.Append(",");
-                    SerializeVector3(sb,humanoidBones[i].LocalPosition);
-                    SerializeQuaternion(sb,humanoidBones[i].LocalRotation);
+                    SerializeVector3(sb, humanoidBone.LocalPosition);
+                    SerializeQuaternion(sb, humanoidBone.LocalRotation);
                 }
                 sb.Length = sb.Length - 1; //最後のカンマ削除
                 return sb.ToString();
             }
 
-            void SerializeVector3(StringBuilder sb, Vector3 vec)
+            private static void SerializeVector3(StringBuilder sb, Vector3 vec)
             {
                 sb.Append(vec.x);
                 sb.Append(",");
@@ -345,7 +342,7 @@ namespace Entum
                 sb.Append(",");
             }
 
-            void SerializeQuaternion(StringBuilder sb, Quaternion q)
+            private static void SerializeQuaternion(StringBuilder sb, Quaternion q)
             {
                 sb.Append(q.x);
                 sb.Append(",");
@@ -372,7 +369,7 @@ namespace Entum
                 }
                 FrameCount = int.Parse(dataString[14 + HumanTrait.MuscleCount]);
                 Time = float.Parse(dataString[15 + HumanTrait.MuscleCount]);
-                var boneValues = HumanBodyBones.GetValues(typeof(HumanBodyBones)) as HumanBodyBones[];
+                var boneValues = Enum.GetValues(typeof(HumanBodyBones)) as HumanBodyBones[];
                 for (int i = 0; i < boneValues.Length; i++)
                 {
                     int startIndex = 16 + HumanTrait.MuscleCount + (i * 8);
@@ -388,14 +385,14 @@ namespace Entum
                 }
             }
 
-            Vector3 DeserializeVector3(string[] str, int startIndex)
+            private static Vector3 DeserializeVector3(IList<string> str, int startIndex)
             {
                 return new Vector3(float.Parse(str[startIndex]), float.Parse(str[startIndex + 1]), float.Parse(str[startIndex + 2]));
             }
 
-            Quaternion DeserializeQuaternion(string[] str, int startIndex)
+            private static Quaternion DeserializeQuaternion(IList<string> str, int startIndex)
             {
-                return new Quaternion(float.Parse(str[startIndex]), float.Parse(str[startIndex + 1]), float.Parse(str[startIndex + 2]), float.Parse(str[startIndex+3]));
+                return new Quaternion(float.Parse(str[startIndex]), float.Parse(str[startIndex + 1]), float.Parse(str[startIndex + 2]), float.Parse(str[startIndex + 3]));
             }
 
         }
