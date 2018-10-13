@@ -25,6 +25,7 @@ Unityエディタ上でVRIKなどのモーションキャプチャをしたHuman
 
 ## おすすめの使い方(.animファイル書き出し)
 モーション記録して生成されたRecordMotion_2018~~~ ファイルを選択、インスペクタ上で右クリックして「Export as Humanoid animation clips」を選択するとAnimationClipに変換されます。
+
 変換後のAnimationClipはHumanoid準拠のモーションとしてMecanimAnimatorやUnityTimeline上で扱うことが出来ます。
 
 もし床にキャラクターが沈んでしまう場合はHumanoidのAnimationClipにあるRoot Transform Position(Y)をBased Upon：Originalに変更してください。  
@@ -39,16 +40,21 @@ Unityエディタ上でVRIKなどのモーションキャプチャをしたHuman
 インスペクタ上のEasyMotionRecorder内、MotionDataRecoderとMotionDataPlayerでキーを選べるようになっています。
 
 ### 長時間記録しているとUnityが落ちた
-素朴な実装を行っているため記録中は常にメモリを食い続けます。もし長時間の記録が必要であればメモリの増設をお勧めします。10分程度でしたら問題ありません。
+素朴な実装を行っているため記録中は常にメモリを食い続けます。
+
+もし長時間の記録が必要であればメモリの増設をお勧めします、10分程度でしたら問題ありません。
 
 ### モーションを再生しているときにスカートや髪が揺れない
-スクリプトの実行順を変更してください。SpringBoneやDynamicBone（MMD4Mecanimを使っている場合はBulletPhysicsImpl)など、揺れモノを処理しているスクリプトの[Script Execution Order](https://docs.unity3d.com/jp/530/Manual/class-ScriptExecution.html)を20000以上に設定してください。
+スクリプトの実行順を変更してください。
+
+SpringBoneやDynamicBone（MMD4Mecanimを使っている場合はBulletPhysicsImpl)など、揺れモノを処理しているスクリプトの[Script Execution Order](https://docs.unity3d.com/jp/530/Manual/class-ScriptExecution.html)を20000以上に設定してください。
 
 ### 再生開始フレームを指定したい
 MotionDataPlayer内のstartFrameで再生開始フレーム指定が可能です。
 
 ### セットアップの説明が分かりづらい
 申し訳ありません、[セットアップ手順の動画](https://twitter.com/entum_info/status/986823609329926146)がありますのでご参照ください。
+
 ビルドしたバイナリ上でモーションを記録したい場合は[MotionDataPlayerCSV.csなど](https://github.com/duo-inc/EasyMotionRecorder/tree/master/EasyMotionRecorder/Assets/EasyMotionRecorder/Scripts/ForRuntime)をご参照ください。
 
 ## Known Issues
