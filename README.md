@@ -11,7 +11,7 @@ Unityエディタ上でVRIKなどのモーションキャプチャをしたHuman
 
 1. シーン上に`/Assets/EasyMotionRecorder/Prefabs/EasyMotionRecorder.prefab`を配置する。
 
-2. 1.でシーン上に配置したEasyMotionRecorderにアタッチされているMotionDataPlayerコンポーネントおよびMotionDataRecoderコンポーネントのAnimatorにモーションキャプチャ対象のキャラクターを指定する。
+2. 1.でシーン上に配置したEasyMotionRecorderにアタッチされているMotionDataPlayerコンポーネントおよびMotionDataRecoderコンポーネントのAnimatorにモーションキャプチャ対象のキャラクターをアタッチする。
 
 ### モーション記録
 1. Unityエディタ上で実行して、Rキーを押したタイミングからモーションキャプチャデータを記録、Xキーでファイル書き出しをして記録を終了します。
@@ -19,7 +19,7 @@ Unityエディタ上でVRIKなどのモーションキャプチャをしたHuman
 2. /Assets/Resources/の中にRecordMotion_2018~~~ ファイルが生成されていればモーション記録が成功しています。
 
 ### モーション再生
-1. エディタ実行前にモーション録画で生成したファイル（RecordMotion_2018~~~ ）をシーン上のEasyMotionCapture内、MotionDataPlayerのRecordedMotionDataにセットします。
+1. エディタ実行前にモーション録画で生成したファイル（RecordMotion_2018~~~ ）をシーン上に存在するEasyMotionRecorderゲームオブジェクトのMotionDataPlayerコンポーネントのRecordedMotionDataプロパティにアタッチします。
 
 2. Unityエディタ上で実行して、Sキーでモーションデータの再生開始が行えます。モーションデータの最後に到達するか、Tキーでモーションデータ再生が終了します。
 
