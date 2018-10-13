@@ -29,7 +29,7 @@ Unityエディタ上でVRIKなどのモーションキャプチャをしたHuman
 変換後のAnimationClipはHumanoid準拠のモーションとしてMecanimAnimatorやUnityTimeline上で扱うことが出来ます。
 
 もし床にキャラクターが沈んでしまう場合はHumanoidのAnimationClipにあるRoot Transform Position(Y)をBased Upon：Originalに変更してください。  
-![export_gif](./doc_image/emrec_export_humanoid.gif)
+![export_gif](https://github.com/duo-inc/EasyMotionRecorder/blob/readme_images/Images/emrec_export_humanoid.gif)
 
 ## FAQ
 
