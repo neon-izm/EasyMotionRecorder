@@ -47,7 +47,7 @@ Unityエディタ上でVRIKなどのモーションキャプチャをしたHuman
 ### モーションを再生しているときにスカートや髪が揺れない
 スクリプトの実行順を変更してください。
 
-SpringBoneやDynamicBone（MMD4Mecanimを使っている場合はBulletPhysicsImpl)など、揺れモノを処理しているスクリプトの[Script Execution Order](https://docs.unity3d.com/jp/530/Manual/class-ScriptExecution.html)を20000以上に設定してください。
+SpringBone, DynamicBone, BulletPhysicsImplなど、揺れ物アセットの[Script Execution Order](https://docs.unity3d.com/jp/530/Manual/class-ScriptExecution.html)を20000以上に設定してください。
 
 ### 再生開始フレームを指定したい
 MotionDataPlayer内のstartFrameで再生開始フレーム指定が可能です。
