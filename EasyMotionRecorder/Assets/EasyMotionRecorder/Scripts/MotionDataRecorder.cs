@@ -48,6 +48,7 @@ namespace Entum
         private HumanPose _currentPose;
         private HumanPoseHandler _poseHandler;
         private Action _onRecordEnd;
+        private float _recordStartTime;
 
         // Use this for initialization
         private void Awake()
@@ -84,7 +85,7 @@ namespace Entum
             }
 
 
-            RecordedTime += Time.deltaTime;
+            RecordedTime += Time.realtimeSinceStartup - _recordStartTime;
             //現在のフレームのHumanoidの姿勢を取得
             _poseHandler.GetHumanPose(ref _currentPose);
             //posesに取得した姿勢を書き込む
@@ -136,6 +137,7 @@ namespace Entum
 
             Poses = ScriptableObject.CreateInstance<HumanoidPoses>();
             RecordedTime = 0f;
+            _recordStartTime = Time.realtimeSinceStartup;
 
             _onRecordEnd += WriteAnimationFile;
             FrameIndex = 0;
