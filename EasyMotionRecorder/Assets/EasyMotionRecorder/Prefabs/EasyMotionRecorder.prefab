@@ -8,19 +8,20 @@ Prefab:
     m_TransformParent: {fileID: 0}
     m_Modifications: []
     m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 0}
+  m_SourcePrefab: {fileID: 0}
   m_RootGameObject: {fileID: 1795456427395220}
-  m_IsPrefabParent: 1
+  m_IsPrefabAsset: 1
 --- !u!1 &1795456427395220
 GameObject:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 5
+  serializedVersion: 6
   m_Component:
   - component: {fileID: 4439970644144982}
   - component: {fileID: 114915434757725700}
   - component: {fileID: 114249719805235686}
+  - component: {fileID: 114460382474975758}
   m_Layer: 0
   m_Name: EasyMotionRecorder
   m_TagString: Untagged
@@ -31,7 +32,7 @@ GameObject:
 --- !u!4 &4439970644144982
 Transform:
   m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1795456427395220}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -44,7 +45,7 @@ Transform:
 --- !u!114 &114249719805235686
 MonoBehaviour:
   m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1795456427395220}
   m_Enabled: 1
@@ -52,17 +53,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 171f7816f5da7ba4eab3cf34b9955f13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  recordStartKey: 114
-  recordStopKey: 120
-  animator: {fileID: 0}
-  Recording: 0
-  frameIndex: 0
-  rootBoneSystem: 1
-  targetRootBone: 0
+  _recordStartKey: 114
+  _recordStopKey: 120
+  _animator: {fileID: 0}
+  _recording: 0
+  FrameIndex: 0
+  _rootBoneSystem: 1
+  _targetRootBone: 0
+--- !u!114 &114460382474975758
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1795456427395220}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79e7c07a2aa3ba848ab52ca6ed2e213b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _recordFaceBlendshapes: 0
+  _exclusiveBlendshapeNames: []
 --- !u!114 &114915434757725700
 MonoBehaviour:
   m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1795456427395220}
   m_Enabled: 1
@@ -70,12 +84,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a94616cf260a0e4386d211583fd6681, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playStartKey: 115
-  playStopKey: 116
-  recordedMotionData: {fileID: 0}
-  animator: {fileID: 0}
-  startFrame: 0
-  Playing: 0
-  frameIndex: 0
-  rootBoneSystem: 1
-  targetRootBone: 0
+  _playStartKey: 115
+  _playStopKey: 116
+  RecordedMotionData: {fileID: 0}
+  _animator: {fileID: 0}
+  _startFrame: 0
+  _playing: 0
+  _frameIndex: 0
+  _rootBoneSystem: 1
+  _targetRootBone: 0

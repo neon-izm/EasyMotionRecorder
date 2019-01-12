@@ -24,6 +24,9 @@ namespace Entum
     [DefaultExecutionOrder(32000)]
     public class MotionDataRecorder : MonoBehaviour
     {
+        public Action OnRecordStart;
+        public Action OnRecordEnd;
+        
         [SerializeField]
         private KeyCode _recordStartKey = KeyCode.R;
         [SerializeField]
@@ -31,6 +34,11 @@ namespace Entum
 
         [SerializeField]
         private Animator _animator;
+
+        public Animator CharacterAnimator
+        {
+            get { return _animator; }
+        }
 
         [SerializeField]
         private bool _recording;
@@ -47,7 +55,7 @@ namespace Entum
 
         private HumanPose _currentPose;
         private HumanPoseHandler _poseHandler;
-        private Action _onRecordEnd;
+
         private float _recordStartTime;
 
         // Use this for initialization
@@ -61,6 +69,7 @@ namespace Entum
             }
 
             _poseHandler = new HumanPoseHandler(_animator.avatar, _animator.transform);
+            OnRecordEnd += WriteAnimationFile;
         }
 
         private void Update()
@@ -134,14 +143,16 @@ namespace Entum
                 return;
             }
 
-
             Poses = ScriptableObject.CreateInstance<HumanoidPoses>();
             RecordedTime = 0f;
             _recordStartTime = Time.realtimeSinceStartup;
-
-            _onRecordEnd += WriteAnimationFile;
+            if (OnRecordStart != null)
+            {
+                OnRecordStart();
+            }
+            
             FrameIndex = 0;
-            _recording = true;
+            _recording = true;            
         }
 
         /// <summary>
@@ -154,13 +165,11 @@ namespace Entum
                 return;
             }
 
-
-            if (_onRecordEnd != null)
+            if (OnRecordEnd != null)
             {
-                _onRecordEnd();
-                _onRecordEnd = null;
+                OnRecordEnd();                
             }
-
+            
             _recording = false;
         }
 
@@ -204,7 +213,7 @@ namespace Entum
         /// 指定したパスにディレクトリが存在しない場合
         /// すべてのディレクトリとサブディレクトリを作成します
         /// </summary>
-        private static DirectoryInfo SafeCreateDirectory(string path)
+        public static DirectoryInfo SafeCreateDirectory(string path)
         {
             return Directory.Exists(path) ? null : Directory.CreateDirectory(path);
         }
