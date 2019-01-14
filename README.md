@@ -1,3 +1,6 @@
+[![license](https://img.shields.io/github/license/duo-inc/EasyMotionRecorder.svg?style=flat-square)](https://github.com/duo-inc/EasyMotionRecorder/blob/master/LICENSE.txt)
+[![release](https://img.shields.io/github/release/duo-inc/EasyMotionRecorder.svg?style=flat-square)](https://github.com/duo-inc/EasyMotionRecorder/releases)
+
 # EasyMotionRecorder
 Unityエディタ上でVRIKなどのモーションキャプチャをしたHumanoidキャラクターのモーションを記録, 再生をするスクリプトです。
 
