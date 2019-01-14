@@ -27,7 +27,7 @@ namespace Entum
     [RequireComponent(typeof(MotionDataRecorder))]
     public class FaceAnimationRecorder : MonoBehaviour
     {
-        [FormerlySerializedAs("recordFaceBlendshapes")] [Header("表情記録を同時に行う場合はtrueにします")] [SerializeField]
+        [Header("表情記録を同時に行う場合はtrueにします")] [SerializeField]
         private bool _recordFaceBlendshapes = false;
 
         [Header("リップシンクを記録したくない場合はここにモーフ名を入れていく 例:face_mouse_eなど")] [SerializeField]
@@ -38,14 +38,14 @@ namespace Entum
 
         private SkinnedMeshRenderer[] _smeshs;
 
-        private CharacterFaciamData _faciamData = null;
+        private CharacterFacialData _facialData = null;
 
         private bool _recording = false;
 
         private int _frameCount = 0;
 
 
-        CharacterFaciamData.SerializeHumanoidFace _past = new CharacterFaciamData.SerializeHumanoidFace();
+        CharacterFacialData.SerializeHumanoidFace _past = new CharacterFacialData.SerializeHumanoidFace();
 
         private float _recordedTime = 0f;
 
@@ -116,7 +116,7 @@ namespace Entum
             Debug.Log("FaceAnimationRecorder record start");
             _recording = true;
             _frameCount = 0;
-            _faciamData = ScriptableObject.CreateInstance<CharacterFaciamData>();
+            _facialData = ScriptableObject.CreateInstance<CharacterFacialData>();
         }
 
         /// <summary>
@@ -134,14 +134,13 @@ namespace Entum
                 Debug.LogError("顔のメッシュ指定がされていないので顔のアニメーションは記録しませんでした");
                 if (_recording == true)
                 {
-                    Debug.LogAssertion("Unexpect execution!!!!");
-                    
+                    Debug.LogAssertion("Unexpected execution!!!!");                    
                 }
             }
             else
             {
                 //WriteAnimationFileToScriptableObject();
-                ExportFacialAnimationClip(_animRecorder.CharacterAnimator, _faciamData);
+                ExportFacialAnimationClip(_animRecorder.CharacterAnimator, _facialData);
             }
 
             Debug.Log("FaceAnimationRecorder record end");
@@ -159,13 +158,13 @@ namespace Entum
                 DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss") +
                 ".asset");
 
-            if (_faciamData == null)
+            if (_facialData == null)
             {
                 Debug.LogError("記録されたFaceデータがnull");
             }
             else
             {
-                AssetDatabase.CreateAsset(_faciamData, path);
+                AssetDatabase.CreateAsset(_facialData, path);
                 AssetDatabase.Refresh();
             }
 
@@ -174,20 +173,20 @@ namespace Entum
         }
 
         //フレーム内の差分が無いかをチェックするやつ。
-        private bool IsSame(CharacterFaciamData.SerializeHumanoidFace a, CharacterFaciamData.SerializeHumanoidFace b)
+        private bool IsSame(CharacterFacialData.SerializeHumanoidFace a, CharacterFacialData.SerializeHumanoidFace b)
         {
-            if (a == null || b == null || a.smeshes.Count == 0 || b.smeshes.Count == 0)
+            if (a == null || b == null || a.Smeshes.Count == 0 || b.Smeshes.Count == 0)
             {
                 return false;
             }
 
-            if (a.blendShapeNum() != b.blendShapeNum())
+            if (a.BlendShapeNum() != b.BlendShapeNum())
             {
                 return false;
             }
 
-            return !a.smeshes.Where((t1, i) =>
-                t1.blendShapes.Where((t, j) => Mathf.Abs(t - b.smeshes[i].blendShapes[j]) > 1).Any()).Any();
+            return !a.Smeshes.Where((t1, i) =>
+                t1.blendShapes.Where((t, j) => Mathf.Abs(t - b.Smeshes[i].blendShapes[j]) > 1).Any()).Any();
         }
 
         private void LateUpdate()
@@ -204,13 +203,13 @@ namespace Entum
 
             _recordedTime += Time.deltaTime;
 
-            var p = new CharacterFaciamData.SerializeHumanoidFace();
+            var p = new CharacterFacialData.SerializeHumanoidFace();
             for (int i = 0; i < _smeshs.Length; i++)
             {
-                var singleSmesh = new CharacterFaciamData.SerializeHumanoidFace.MeshAndBlendshape();
-                singleSmesh.path = _smeshs[i].name;
-                singleSmesh.blendShapes = new float[_smeshs[i].sharedMesh.blendShapeCount];
-                //Debug.Log("singleSmesh.blendShapes length:"+singleSmesh.blendShapes.Length+" target:"+_smeshs[i].sharedMesh.blendShapeCount);
+                var mesh = new CharacterFacialData.SerializeHumanoidFace.MeshAndBlendshape();
+                mesh.path = _smeshs[i].name;
+                mesh.blendShapes = new float[_smeshs[i].sharedMesh.blendShapeCount];
+                
                 for (int j = 0; j < _smeshs[i].sharedMesh.blendShapeCount; j++)
                 {
                     var tname = _smeshs[i].sharedMesh.GetBlendShapeName(j);
@@ -228,25 +227,22 @@ namespace Entum
 
                     if (useThis)
                     {
-                        singleSmesh.blendShapes[j] = _smeshs[i].GetBlendShapeWeight(j);
+                        mesh.blendShapes[j] = _smeshs[i].GetBlendShapeWeight(j);
                     }
                 }
 
-                p.smeshes.Add(singleSmesh);
+                p.Smeshes.Add(mesh);
             }
 
-            if (IsSame(p, _past))
-            {
-            }
-            else
+            if (!IsSame(p, _past))
             {
                 p.FrameCount = _frameCount;
                 p.Time = _recordedTime;
 
-                _faciamData.Facials.Add(p);
-                _past = new CharacterFaciamData.SerializeHumanoidFace(p);
+                _facialData.Facials.Add(p);
+                _past = new CharacterFacialData.SerializeHumanoidFace(p);
             }
-
+            
             _frameCount++;
         }
 
@@ -256,7 +252,7 @@ namespace Entum
         /// </summary>
         /// <param name="root"></param>
         /// <param name="facial"></param>
-        void ExportFacialAnimationClip(Animator root, CharacterFaciamData facial)
+        void ExportFacialAnimationClip(Animator root, CharacterFacialData facial)
         {
             var animclip = new AnimationClip();
 
@@ -283,13 +279,13 @@ namespace Entum
                     AnimationCurve curve = new AnimationCurve();
 
                     float pastBlendshapeWeight = -1;
-                    for (int k = 0; k < _faciamData.Facials.Count; k++)
+                    for (int k = 0; k < _facialData.Facials.Count; k++)
                     {
-                        if (!(Mathf.Abs(pastBlendshapeWeight - _faciamData.Facials[k].smeshes[i].blendShapes[j]) >
+                        if (!(Mathf.Abs(pastBlendshapeWeight - _facialData.Facials[k].Smeshes[i].blendShapes[j]) >
                               0.1f)) continue;
-                        curve.AddKey(facial.Facials[k].Time, _faciamData.Facials[k].smeshes[i].blendShapes[j]);
+                        curve.AddKey(facial.Facials[k].Time, _facialData.Facials[k].Smeshes[i].blendShapes[j]);
 
-                        pastBlendshapeWeight = _faciamData.Facials[k].smeshes[i].blendShapes[j];
+                        pastBlendshapeWeight = _facialData.Facials[k].Smeshes[i].blendShapes[j];
                     }
 
 
