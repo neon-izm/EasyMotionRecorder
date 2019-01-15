@@ -53,7 +53,8 @@ namespace Entum
 
         private HumanPose _currentPose;
         private HumanPoseHandler _poseHandler;
-        private Action _onRecordEnd;
+        public Action OnRecordStart;
+        public Action OnRecordEnd;
 
 
         // Use this for initialization
@@ -166,8 +167,8 @@ namespace Entum
 
             Poses = ScriptableObject.CreateInstance<HumanoidPoses>();
             RecordedTime = 0f;
-
-            _onRecordEnd += WriteAnimationFile;
+            OnRecordStart?.Invoke();
+            OnRecordEnd += WriteAnimationFile;
             FrameIndex = 0;
             _recording = true;
         }
@@ -183,11 +184,7 @@ namespace Entum
             }
 
 
-            if (_onRecordEnd != null)
-            {
-                _onRecordEnd();
-                _onRecordEnd = null;
-            }
+            OnRecordEnd?.Invoke();
 
             _recording = false;
         }
@@ -232,9 +229,13 @@ namespace Entum
         /// 指定したパスにディレクトリが存在しない場合
         /// すべてのディレクトリとサブディレクトリを作成します
         /// </summary>
-        private static DirectoryInfo SafeCreateDirectory(string path)
+        public static DirectoryInfo SafeCreateDirectory(string path)
         {
             return Directory.Exists(path) ? null : Directory.CreateDirectory(path);
+        }
+        public Animator CharacterAnimator
+        {
+            get { return _animator; }
         }
 
         public class TQ
