@@ -102,28 +102,17 @@ namespace Entum
                 case MotionDataSettings.Rootbonesystem.Objectroot:
                     serializedPose.BodyRootPosition = _animator.transform.localPosition;
                     serializedPose.BodyRootRotation = _animator.transform.localRotation;
-                   // serializedPose.LeftfootIK_Pos = _animator.GetBoneTransform(IK_LeftFootBone).localPosition;
-                   // serializedPose.LeftfootIK_Rot = _animator.GetBoneTransform(IK_LeftFootBone).localRotation;
-                   // serializedPose.RightfootIK_Pos = _animator.GetBoneTransform(IK_RightFootBone).localPosition;
-                   // serializedPose.RightfootIK_Rot = _animator.GetBoneTransform(IK_RightFootBone).localRotation;
                     break;
 
                 case MotionDataSettings.Rootbonesystem.Hipbone:
                     serializedPose.BodyRootPosition = _animator.GetBoneTransform(_targetRootBone).position;
                     serializedPose.BodyRootRotation = _animator.GetBoneTransform(_targetRootBone).rotation;
-                  //  serializedPose.LeftfootIK_Pos = _animator.GetBoneTransform(IK_LeftFootBone).position;
-                  //  serializedPose.LeftfootIK_Rot = _animator.GetBoneTransform(IK_LeftFootBone).rotation;
-                  //  serializedPose.RightfootIK_Pos = _animator.GetBoneTransform(IK_RightFootBone).position;
-                  //  serializedPose.RightfootIK_Rot = _animator.GetBoneTransform(IK_RightFootBone).rotation;
                     Debug.LogWarning(_animator.GetBoneTransform(_targetRootBone).position);
                     break;
 
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-            //  Original
-           //  serializedPose.BodyPosition = _currentPose.bodyPosition;
-          //  serializedPose.BodyRotation = _currentPose.bodyRotation;
             var bodyTQ = new TQ(_currentPose.bodyPosition, _currentPose.bodyRotation);
             var LeftFootTQ = new TQ(_animator.GetBoneTransform(IK_LeftFootBone).position, _animator.GetBoneTransform(IK_LeftFootBone).rotation);
             var RightFootTQ = new TQ(_animator.GetBoneTransform(IK_RightFootBone).position, _animator.GetBoneTransform(IK_RightFootBone).rotation);
