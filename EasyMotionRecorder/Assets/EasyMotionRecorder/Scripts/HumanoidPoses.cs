@@ -1,4 +1,4 @@
-﻿/**
+/**
 [EasyMotionRecorder]
 
 Copyright (c) 2018 Duo.inc
@@ -180,7 +180,7 @@ namespace Entum
             AnimationUtility.SetAnimationClipSettings(clip, new AnimationClipSettings { loopTime = false });
 
 
-            // position
+            // body position
             {
                 var curveX = new AnimationCurve();
                 var curveY = new AnimationCurve();
@@ -199,8 +199,45 @@ namespace Entum
                 const string muscleZ = "RootT.z";
                 clip.SetCurve("", typeof(Animator), muscleZ, curveZ);
             }
+            // Leftfoot position
+            {
+                var curveX = new AnimationCurve();
+                var curveY = new AnimationCurve();
+                var curveZ = new AnimationCurve();
+                foreach (var item in Poses)
+                {
+                    curveX.AddKey(item.Time, item.LeftfootIK_Pos.x);
+                    curveY.AddKey(item.Time, item.LeftfootIK_Pos.y);
+                    curveZ.AddKey(item.Time, item.LeftfootIK_Pos.z);
+                }
 
-            // rotation
+                const string muscleX = "LeftFootT.x";
+                clip.SetCurve("", typeof(Animator), muscleX, curveX);
+                const string muscleY = "LeftFootT.y";
+                clip.SetCurve("", typeof(Animator), muscleY, curveY);
+                const string muscleZ = "LeftFootT.z";
+                clip.SetCurve("", typeof(Animator), muscleZ, curveZ);
+            }
+            // Rightfoot position
+            {
+                var curveX = new AnimationCurve();
+                var curveY = new AnimationCurve();
+                var curveZ = new AnimationCurve();
+                foreach (var item in Poses)
+                {
+                    curveX.AddKey(item.Time, item.RightfootIK_Pos.x);
+                    curveY.AddKey(item.Time, item.RightfootIK_Pos.y);
+                    curveZ.AddKey(item.Time, item.RightfootIK_Pos.z);
+                }
+
+                const string muscleX = "RightFootT.x";
+                clip.SetCurve("", typeof(Animator), muscleX, curveX);
+                const string muscleY = "RightFootT.y";
+                clip.SetCurve("", typeof(Animator), muscleY, curveY);
+                const string muscleZ = "RightFootT.z";
+                clip.SetCurve("", typeof(Animator), muscleZ, curveZ);
+            }
+            // body rotation
             {
                 var curveX = new AnimationCurve();
                 var curveY = new AnimationCurve();
@@ -221,6 +258,52 @@ namespace Entum
                 const string muscleZ = "RootQ.z";
                 clip.SetCurve("", typeof(Animator), muscleZ, curveZ);
                 const string muscleW = "RootQ.w";
+                clip.SetCurve("", typeof(Animator), muscleW, curveW);
+            }
+            // Leftfoot rotation
+            {
+                var curveX = new AnimationCurve();
+                var curveY = new AnimationCurve();
+                var curveZ = new AnimationCurve();
+                var curveW = new AnimationCurve();
+                foreach (var item in Poses)
+                {
+                    curveX.AddKey(item.Time, item.LeftfootIK_Rot.x);
+                    curveY.AddKey(item.Time, item.LeftfootIK_Rot.y);
+                    curveZ.AddKey(item.Time, item.LeftfootIK_Rot.z);
+                    curveW.AddKey(item.Time, item.LeftfootIK_Rot.w);
+                }
+
+                const string muscleX = "LeftFootQ.x";
+                clip.SetCurve("", typeof(Animator), muscleX, curveX);
+                const string muscleY = "LeftFootQ.y";
+                clip.SetCurve("", typeof(Animator), muscleY, curveY);
+                const string muscleZ = "LeftFootQ.z";
+                clip.SetCurve("", typeof(Animator), muscleZ, curveZ);
+                const string muscleW = "LeftFootQ.w";
+                clip.SetCurve("", typeof(Animator), muscleW, curveW);
+            }
+            // Rightfoot rotation
+            {
+                var curveX = new AnimationCurve();
+                var curveY = new AnimationCurve();
+                var curveZ = new AnimationCurve();
+                var curveW = new AnimationCurve();
+                foreach (var item in Poses)
+                {
+                    curveX.AddKey(item.Time, item.RightfootIK_Rot.x);
+                    curveY.AddKey(item.Time, item.RightfootIK_Rot.y);
+                    curveZ.AddKey(item.Time, item.RightfootIK_Rot.z);
+                    curveW.AddKey(item.Time, item.RightfootIK_Rot.w);
+                }
+
+                const string muscleX = "RightFootQ.x";
+                clip.SetCurve("", typeof(Animator), muscleX, curveX);
+                const string muscleY = "RightFootQ.y";
+                clip.SetCurve("", typeof(Animator), muscleY, curveY);
+                const string muscleZ = "RightFootQ.z";
+                clip.SetCurve("", typeof(Animator), muscleZ, curveZ);
+                const string muscleW = "RightFootQ.w";
                 clip.SetCurve("", typeof(Animator), muscleW, curveW);
             }
 
@@ -260,6 +343,10 @@ namespace Entum
 
             public Vector3 BodyPosition;
             public Quaternion BodyRotation;
+            public Vector3 LeftfootIK_Pos;
+            public Quaternion LeftfootIK_Rot;
+            public Vector3 RightfootIK_Pos;
+            public Quaternion RightfootIK_Rot;
 
             public float[] Muscles;
 
