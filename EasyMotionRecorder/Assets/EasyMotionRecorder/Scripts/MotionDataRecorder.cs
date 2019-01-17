@@ -11,7 +11,6 @@ using UnityEngine;
 using System;
 using System.IO;
 using System.Reflection;
-using UnityEngine.Experimental.Animations;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -122,7 +121,7 @@ namespace Entum
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-            //  Original 
+            //  Original
            //  serializedPose.BodyPosition = _currentPose.bodyPosition;
           //  serializedPose.BodyRotation = _currentPose.bodyRotation;
             var bodyTQ = new TQ(_currentPose.bodyPosition, _currentPose.bodyRotation);
@@ -167,7 +166,10 @@ namespace Entum
 
             Poses = ScriptableObject.CreateInstance<HumanoidPoses>();
             RecordedTime = 0f;
-            OnRecordStart?.Invoke();
+            if (OnRecordStart != null)
+            {
+                OnRecordStart();
+            }
             OnRecordEnd += WriteAnimationFile;
             FrameIndex = 0;
             _recording = true;
@@ -184,7 +186,10 @@ namespace Entum
             }
 
 
-            OnRecordEnd?.Invoke();
+            if (OnRecordEnd != null)
+            {
+                OnRecordEnd();
+            }
 
             _recording = false;
         }
