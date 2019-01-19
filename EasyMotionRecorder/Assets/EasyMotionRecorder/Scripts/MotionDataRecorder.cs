@@ -179,6 +179,7 @@ namespace Entum
             {
                 OnRecordEnd();
             }
+            OnRecordEnd -= WriteAnimationFile;
 
             _recording = false;
         }
