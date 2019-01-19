@@ -1,12 +1,10 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEditor;
-using UnityEditor.VersionControl;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 /**
 [EasyMotionRecorder]
@@ -115,7 +113,7 @@ namespace Entum
 
             Debug.Log("FaceAnimationRecorder record start");
             _recording = true;
-            _recordedTime = 0;
+            _recordedTime = 0f;
             _frameCount = 0;
             _facialData = ScriptableObject.CreateInstance<CharacterFacialData>();
         }
@@ -135,7 +133,7 @@ namespace Entum
                 Debug.LogError("顔のメッシュ指定がされていないので顔のアニメーションは記録しませんでした");
                 if (_recording == true)
                 {
-                    Debug.LogAssertion("Unexpected execution!!!!");                    
+                    Debug.LogAssertion("Unexpected execution!!!!");
                 }
             }
             else
@@ -169,8 +167,8 @@ namespace Entum
                 AssetDatabase.Refresh();
             }
 
+            _recordedTime = 0f;
             _frameCount = 0;
-            _recordedTime = 0;
         }
 
         //フレーム内の差分が無いかをチェックするやつ。
@@ -210,7 +208,7 @@ namespace Entum
                 var mesh = new CharacterFacialData.SerializeHumanoidFace.MeshAndBlendshape();
                 mesh.path = _smeshs[i].name;
                 mesh.blendShapes = new float[_smeshs[i].sharedMesh.blendShapeCount];
-                
+
                 for (int j = 0; j < _smeshs[i].sharedMesh.blendShapeCount; j++)
                 {
                     var tname = _smeshs[i].sharedMesh.GetBlendShapeName(j);
@@ -243,7 +241,7 @@ namespace Entum
                 _facialData.Facials.Add(p);
                 _past = new CharacterFacialData.SerializeHumanoidFace(p);
             }
-            
+
             _frameCount++;
         }
 
