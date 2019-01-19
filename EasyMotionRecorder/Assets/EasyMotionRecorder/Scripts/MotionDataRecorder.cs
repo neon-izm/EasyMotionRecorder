@@ -1,4 +1,4 @@
-/**
+﻿/**
 [EasyMotionRecorder]
 
 Copyright (c) 2018 Duo.inc
@@ -154,14 +154,16 @@ namespace Entum
 
 
             Poses = ScriptableObject.CreateInstance<HumanoidPoses>();
-            RecordedTime = 0f;
+
             if (OnRecordStart != null)
             {
                 OnRecordStart();
             }
+
             OnRecordEnd += WriteAnimationFile;
-            FrameIndex = 0;
             _recording = true;
+            RecordedTime = 0f;
+            FrameIndex = 0;
         }
 
         /// <summary>
@@ -179,8 +181,8 @@ namespace Entum
             {
                 OnRecordEnd();
             }
-            OnRecordEnd -= WriteAnimationFile;
 
+            OnRecordEnd -= WriteAnimationFile;
             _recording = false;
         }
 
