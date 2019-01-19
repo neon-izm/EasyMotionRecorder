@@ -115,6 +115,7 @@ namespace Entum
 
             Debug.Log("FaceAnimationRecorder record start");
             _recording = true;
+            _recordedTime = 0;
             _frameCount = 0;
             _facialData = ScriptableObject.CreateInstance<CharacterFacialData>();
         }
