@@ -363,9 +363,14 @@ namespace Entum
                 public Vector3 LocalPosition;
                 public Quaternion LocalRotation;
 
+                private static Dictionary<Transform, string> _pathCache = new Dictionary<Transform, string>();
+
                 private static string BuildRelativePath(Transform root, Transform target)
                 {
                     var path = "";
+                    _pathCache.TryGetValue(target, out path);
+                    if(path != null) return path;
+
                     var current = target;
                     while (true)
                     {
@@ -376,6 +381,8 @@ namespace Entum
 
                         current = current.parent;
                     }
+
+                    _pathCache.Add(target, path);
 
                     return path;
                 }
