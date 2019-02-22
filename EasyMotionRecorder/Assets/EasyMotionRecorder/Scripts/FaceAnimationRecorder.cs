@@ -257,34 +257,59 @@ namespace Entum
 
             var mesh = _smeshs;
 
-            for (int i = 0; i < mesh.Length; i++)
+            for (int faceTargetMeshIndex = 0; faceTargetMeshIndex < mesh.Length; faceTargetMeshIndex++)
             {
-                var pathsb = new StringBuilder().Append(mesh[i].transform.name);
-                var trans = mesh[i].transform;
+                var pathsb = new StringBuilder().Append(mesh[faceTargetMeshIndex].transform.name);
+                var trans = mesh[faceTargetMeshIndex].transform;
                 while (trans.parent != null && trans.parent != root.transform)
                 {
                     trans = trans.parent;
                     pathsb.Insert(0, "/").Insert(0, trans.name);
                 }
 
+                //pathにはBlednshapeのベース名が入る
+                //U_CHAR_1:SkinnedMeshRendererみたいなもの
                 var path = pathsb.ToString();
 
-                for (var j = 0; j < mesh[i].sharedMesh.blendShapeCount; j++)
+                //個別メッシュの個別Blendshapeごとに、AnimationCurveを生成している
+                for (var blendShapeIndex = 0;
+                    blendShapeIndex < mesh[faceTargetMeshIndex].sharedMesh.blendShapeCount;
+                    blendShapeIndex++)
                 {
                     var curveBinding = new EditorCurveBinding();
                     curveBinding.type = typeof(SkinnedMeshRenderer);
                     curveBinding.path = path;
-                    curveBinding.propertyName = "blendShape." + mesh[i].sharedMesh.GetBlendShapeName(j);
+                    curveBinding.propertyName = "blendShape." +
+                                                mesh[faceTargetMeshIndex].sharedMesh.GetBlendShapeName(blendShapeIndex);
                     AnimationCurve curve = new AnimationCurve();
 
                     float pastBlendshapeWeight = -1;
                     for (int k = 0; k < _facialData.Facials.Count; k++)
                     {
-                        if (!(Mathf.Abs(pastBlendshapeWeight - _facialData.Facials[k].Smeshes[i].blendShapes[j]) >
-                              0.1f)) continue;
-                        curve.AddKey(facial.Facials[k].Time, _facialData.Facials[k].Smeshes[i].blendShapes[j]);
+                        float time = 0;
+                        if (k > 0)
+                        {
+                            time = facial.Facials[k - 1].Time;
+                        }
 
-                        pastBlendshapeWeight = _facialData.Facials[k].Smeshes[i].blendShapes[j];
+                        for (float ind = time; ind < facial.Facials[k].Time; ind += 0.1f)
+                        {
+                            if (k > 0)
+                            {
+                                curve.AddKey(ind,
+                                    _facialData.Facials[k - 1].Smeshes[faceTargetMeshIndex]
+                                        .blendShapes[blendShapeIndex]);
+                            }
+                            else
+                            {
+                                curve.AddKey(ind,
+                                    _facialData.Facials[0].Smeshes[faceTargetMeshIndex].blendShapes[blendShapeIndex]);
+                            }
+                        }
+
+                        curve.AddKey(facial.Facials[k].Time,
+                            _facialData.Facials[k].Smeshes[faceTargetMeshIndex].blendShapes[blendShapeIndex]);
+
                     }
 
 
