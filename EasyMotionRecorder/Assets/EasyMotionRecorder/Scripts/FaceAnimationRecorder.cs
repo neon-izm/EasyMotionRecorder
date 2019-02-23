@@ -267,7 +267,7 @@ namespace Entum
                     pathsb.Insert(0, "/").Insert(0, trans.name);
                 }
 
-                //pathにはBlednshapeのベース名が入る
+                //pathにはBlendshapeのベース名が入る
                 //U_CHAR_1:SkinnedMeshRendererみたいなもの
                 var path = pathsb.ToString();
 
