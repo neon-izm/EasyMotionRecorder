@@ -49,6 +49,7 @@ namespace Entum
 
         protected HumanoidPoses Poses;
         protected float RecordedTime;
+        protected float StartTime;
 
         private HumanPose _currentPose;
         private HumanPoseHandler _poseHandler;
@@ -91,7 +92,7 @@ namespace Entum
             }
 
 
-            RecordedTime += Time.deltaTime;
+            RecordedTime = Time.time - StartTime;
             //現在のフレームのHumanoidの姿勢を取得
             _poseHandler.GetHumanPose(ref _currentPose);
             //posesに取得した姿勢を書き込む
@@ -163,6 +164,7 @@ namespace Entum
             OnRecordEnd += WriteAnimationFile;
             _recording = true;
             RecordedTime = 0f;
+            StartTime = Time.time;
             FrameIndex = 0;
         }
 
@@ -216,7 +218,7 @@ namespace Entum
 
             AssetDatabase.CreateAsset(Poses, uniqueAssetPath);
             AssetDatabase.Refresh();
-
+            StartTime = Time.time;
             RecordedTime = 0f;
             FrameIndex = 0;
 #endif

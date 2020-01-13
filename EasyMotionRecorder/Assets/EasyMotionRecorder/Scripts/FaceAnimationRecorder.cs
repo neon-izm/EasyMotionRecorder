@@ -46,6 +46,7 @@ namespace Entum
         CharacterFacialData.SerializeHumanoidFace _past = new CharacterFacialData.SerializeHumanoidFace();
 
         private float _recordedTime = 0f;
+        private float _startTime;
 
         // Use this for initialization
         private void OnEnable()
@@ -114,6 +115,7 @@ namespace Entum
             Debug.Log("FaceAnimationRecorder record start");
             _recording = true;
             _recordedTime = 0f;
+            _startTime = Time.time;
             _frameCount = 0;
             _facialData = ScriptableObject.CreateInstance<CharacterFacialData>();
         }
@@ -166,7 +168,7 @@ namespace Entum
                 AssetDatabase.CreateAsset(_facialData, path);
                 AssetDatabase.Refresh();
             }
-
+            _startTime = Time.time;
             _recordedTime = 0f;
             _frameCount = 0;
         }
@@ -200,7 +202,7 @@ namespace Entum
                 return;
             }
 
-            _recordedTime += Time.deltaTime;
+            _recordedTime = Time.time - _startTime;
 
             var p = new CharacterFacialData.SerializeHumanoidFace();
             for (int i = 0; i < _smeshs.Length; i++)
