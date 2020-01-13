@@ -31,6 +31,9 @@ namespace Entum
         [Header("リップシンクを記録したくない場合はここにモーフ名を入れていく 例:face_mouse_eなど")] [SerializeField]
         private List<string> _exclusiveBlendshapeNames;
 
+        [Tooltip("記録するFPS。0で制限しない。UpdateのFPSは超えられません。")]
+        public float TargetFPS = 60.0f;
+
         private MotionDataRecorder _animRecorder;
 
 
@@ -203,6 +206,27 @@ namespace Entum
             }
 
             _recordedTime = Time.time - _startTime;
+
+            if (TargetFPS != 0.0f)
+            {
+                var nextTime = (1.0f * (_frameCount + 1)) / TargetFPS;
+                if (nextTime > _recordedTime)
+                {
+                    return;
+                }
+                if (_frameCount % TargetFPS == 0)
+                {
+                    print("Face_FPS=" + 1 / (_recordedTime / _frameCount));
+                }
+            }
+            else
+            {
+                if (Time.frameCount % Application.targetFrameRate == 0)
+                {
+                    print("Face_FPS=" + 1 / Time.deltaTime);
+                }
+            }
+
 
             var p = new CharacterFacialData.SerializeHumanoidFace();
             for (int i = 0; i < _smeshs.Length; i++)

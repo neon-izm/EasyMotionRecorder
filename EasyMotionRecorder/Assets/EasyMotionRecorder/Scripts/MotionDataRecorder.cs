@@ -56,6 +56,9 @@ namespace Entum
         public Action OnRecordStart;
         public Action OnRecordEnd;
 
+        [Tooltip("記録するFPS。0で制限しない。UpdateのFPSは超えられません。")]
+        public float TargetFPS = 60.0f;
+
 
         // Use this for initialization
         private void Awake()
@@ -93,6 +96,28 @@ namespace Entum
 
 
             RecordedTime = Time.time - StartTime;
+
+            if (TargetFPS != 0.0f)
+            {
+                var nextTime = (1.0f * (FrameIndex + 1)) / TargetFPS;
+                if (nextTime > RecordedTime)
+                {
+                    return;
+                }
+                if (FrameIndex % TargetFPS == 0)
+                {
+                    print("Motion_FPS=" + 1 / (RecordedTime / FrameIndex));
+                }
+            }
+            else
+            {
+                if (Time.frameCount % Application.targetFrameRate == 0)
+                {
+                    print("Motion_FPS=" + 1 / Time.deltaTime);
+                }
+            }
+
+
             //現在のフレームのHumanoidの姿勢を取得
             _poseHandler.GetHumanPose(ref _currentPose);
             //posesに取得した姿勢を書き込む
