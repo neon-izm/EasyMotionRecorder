@@ -286,30 +286,10 @@ namespace Entum
                     float pastBlendshapeWeight = -1;
                     for (int k = 0; k < _facialData.Facials.Count; k++)
                     {
-                        float time = 0;
-                        if (k > 0)
-                        {
-                            time = facial.Facials[k - 1].Time;
-                        }
-
-                        for (float ind = time; ind < facial.Facials[k].Time; ind += 0.1f)
-                        {
-                            if (k > 0)
-                            {
-                                curve.AddKey(ind,
-                                    _facialData.Facials[k - 1].Smeshes[faceTargetMeshIndex]
-                                        .blendShapes[blendShapeIndex]);
-                            }
-                            else
-                            {
-                                curve.AddKey(ind,
-                                    _facialData.Facials[0].Smeshes[faceTargetMeshIndex].blendShapes[blendShapeIndex]);
-                            }
-                        }
-
-                        curve.AddKey(facial.Facials[k].Time,
-                            _facialData.Facials[k].Smeshes[faceTargetMeshIndex].blendShapes[blendShapeIndex]);
-
+                        if (!(Mathf.Abs(pastBlendshapeWeight - _facialData.Facials[k].Smeshes[faceTargetMeshIndex].blendShapes[blendShapeIndex]) >
+                              0.1f)) continue;
+                        curve.AddKey(new Keyframe(facial.Facials[k].Time, _facialData.Facials[k].Smeshes[faceTargetMeshIndex].blendShapes[blendShapeIndex], float.PositiveInfinity, 0f));
+                        pastBlendshapeWeight = _facialData.Facials[k].Smeshes[faceTargetMeshIndex].blendShapes[blendShapeIndex];
                     }
 
 
