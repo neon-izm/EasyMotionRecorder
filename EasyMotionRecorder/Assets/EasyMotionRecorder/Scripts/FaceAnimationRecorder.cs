@@ -31,6 +31,9 @@ namespace Entum
         [Header("リップシンクを記録したくない場合はここにモーフ名を入れていく 例:face_mouse_eなど")] [SerializeField]
         private List<string> _exclusiveBlendshapeNames;
 
+        [Tooltip("記録するFPS。0で制限しない。UpdateのFPSは超えられません。")]
+        public float TargetFPS = 60.0f;
+
         private MotionDataRecorder _animRecorder;
 
 
@@ -46,6 +49,7 @@ namespace Entum
         CharacterFacialData.SerializeHumanoidFace _past = new CharacterFacialData.SerializeHumanoidFace();
 
         private float _recordedTime = 0f;
+        private float _startTime;
 
         // Use this for initialization
         private void OnEnable()
@@ -114,6 +118,7 @@ namespace Entum
             Debug.Log("FaceAnimationRecorder record start");
             _recording = true;
             _recordedTime = 0f;
+            _startTime = Time.time;
             _frameCount = 0;
             _facialData = ScriptableObject.CreateInstance<CharacterFacialData>();
         }
@@ -166,7 +171,7 @@ namespace Entum
                 AssetDatabase.CreateAsset(_facialData, path);
                 AssetDatabase.Refresh();
             }
-
+            _startTime = Time.time;
             _recordedTime = 0f;
             _frameCount = 0;
         }
@@ -200,7 +205,28 @@ namespace Entum
                 return;
             }
 
-            _recordedTime += Time.deltaTime;
+            _recordedTime = Time.time - _startTime;
+
+            if (TargetFPS != 0.0f)
+            {
+                var nextTime = (1.0f * (_frameCount + 1)) / TargetFPS;
+                if (nextTime > _recordedTime)
+                {
+                    return;
+                }
+                if (_frameCount % TargetFPS == 0)
+                {
+                    print("Face_FPS=" + 1 / (_recordedTime / _frameCount));
+                }
+            }
+            else
+            {
+                if (Time.frameCount % Application.targetFrameRate == 0)
+                {
+                    print("Face_FPS=" + 1 / Time.deltaTime);
+                }
+            }
+
 
             var p = new CharacterFacialData.SerializeHumanoidFace();
             for (int i = 0; i < _smeshs.Length; i++)
@@ -286,30 +312,10 @@ namespace Entum
                     float pastBlendshapeWeight = -1;
                     for (int k = 0; k < _facialData.Facials.Count; k++)
                     {
-                        float time = 0;
-                        if (k > 0)
-                        {
-                            time = facial.Facials[k - 1].Time;
-                        }
-
-                        for (float ind = time; ind < facial.Facials[k].Time; ind += 0.1f)
-                        {
-                            if (k > 0)
-                            {
-                                curve.AddKey(ind,
-                                    _facialData.Facials[k - 1].Smeshes[faceTargetMeshIndex]
-                                        .blendShapes[blendShapeIndex]);
-                            }
-                            else
-                            {
-                                curve.AddKey(ind,
-                                    _facialData.Facials[0].Smeshes[faceTargetMeshIndex].blendShapes[blendShapeIndex]);
-                            }
-                        }
-
-                        curve.AddKey(facial.Facials[k].Time,
-                            _facialData.Facials[k].Smeshes[faceTargetMeshIndex].blendShapes[blendShapeIndex]);
-
+                        if (!(Mathf.Abs(pastBlendshapeWeight - _facialData.Facials[k].Smeshes[faceTargetMeshIndex].blendShapes[blendShapeIndex]) >
+                              0.1f)) continue;
+                        curve.AddKey(new Keyframe(facial.Facials[k].Time, _facialData.Facials[k].Smeshes[faceTargetMeshIndex].blendShapes[blendShapeIndex], float.PositiveInfinity, 0f));
+                        pastBlendshapeWeight = _facialData.Facials[k].Smeshes[faceTargetMeshIndex].blendShapes[blendShapeIndex];
                     }
 
 

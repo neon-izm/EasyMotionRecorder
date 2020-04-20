@@ -85,6 +85,7 @@ namespace Entum
 #endif
 
             RecordedTime = 0f;
+            StartTime = Time.time;
             FrameIndex = 0;
         }
     }
