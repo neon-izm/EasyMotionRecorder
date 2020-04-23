@@ -1,4 +1,4 @@
-[![license](https://img.shields.io/github/license/neon-izm/EasyMotionRecorder.svg?style=flat-square)](https://github.com/neon-izm/EasyMotionRecorder/blob/master/LICENSE.txt)
+
 [![release](https://img.shields.io/github/release/neon-izm/EasyMotionRecorder.svg?style=flat-square)](https://github.com/neon-izm/EasyMotionRecorder/releases)
 
 # EasyMotionRecorder
