@@ -1,5 +1,5 @@
-[![license](https://img.shields.io/github/license/duo-inc/EasyMotionRecorder.svg?style=flat-square)](https://github.com/duo-inc/EasyMotionRecorder/blob/master/LICENSE.txt)
-[![release](https://img.shields.io/github/release/duo-inc/EasyMotionRecorder.svg?style=flat-square)](https://github.com/duo-inc/EasyMotionRecorder/releases)
+[![license](https://img.shields.io/github/license/neon-izm/EasyMotionRecorder.svg?style=flat-square)](https://github.com/neon-izm/EasyMotionRecorder/blob/master/LICENSE.txt)
+[![release](https://img.shields.io/github/release/neon-izm/EasyMotionRecorder.svg?style=flat-square)](https://github.com/neon-izm/EasyMotionRecorder/releases)
 
 # EasyMotionRecorder
 Unityエディタ上でVRIKなどのモーションキャプチャをしたHumanoidキャラクターのモーションを記録, 再生をするスクリプトです。
@@ -7,7 +7,7 @@ Unityエディタ上でVRIKなどのモーションキャプチャをしたHuman
 例えばVTuberの人が1テイク目でキャラの動きだけを撮り、2テイク目以降で1テイク目のモーションを再生しながら音声と表情を付ける、という使い方を想定しています。
 
 ## 使い方
-[releases](https://github.com/duo-inc/EasyMotionRecorder/releases)からEasyMotionRecorder.unitypackageをダウンロードしてプロジェクトにインポートしてください
+[releases](https://github.com/neon-izm/EasyMotionRecorder/releases)からEasyMotionRecorder.unitypackageをダウンロードしてプロジェクトにインポートしてください
 
 ### Setup手順
 0. モーションキャプチャ対象のキャラクターをHumanoidにしておく。OculusTouchやViveコントローラ、あるいはAxisNeuronやKinectの動きがエディタ上で反映されているシーンをセットアップする。
@@ -58,20 +58,20 @@ MotionDataPlayer内のstartFrameで再生開始フレーム指定が可能です
 ### セットアップの説明が分かりづらい
 申し訳ありません、[セットアップ手順の動画](https://twitter.com/entum_info/status/986823609329926146)がありますのでご参照ください。
 
-ビルドしたバイナリ上でモーションを記録したい場合は[MotionDataPlayerCSV.csなど](https://github.com/duo-inc/EasyMotionRecorder/tree/master/EasyMotionRecorder/Assets/EasyMotionRecorder/Scripts/ForRuntime)をご参照ください。
+ビルドしたバイナリ上でモーションを記録したい場合は[MotionDataPlayerCSV.csなど](https://github.com/neon-izm/EasyMotionRecorder/tree/master/EasyMotionRecorder/Assets/EasyMotionRecorder/Scripts/ForRuntime)をご参照ください。
 
 ## Known Issues
 ### VRIK使用時にキャラクターの立ち位置がズレることがある
 VRIKの処理順による問題です、再生開始時の位置を変更することで暫定対処可能です。
 
 ## 動作環境
-Unity 5.6.5p2 64bit (Windows)のエディタ上で動作確認をしています。
+Unity 2017.4.28f1 64bit (Windows)のエディタ上で動作確認をしています。
 
-Unity5.6~Unity2018.2.14f1 での動作実績があります。
+Unity2017.4~Unity2019.3 での動作実績があります。
 
 公式にはVRIKをサポートしますが、Kinectや各種モーションキャプチャーシステムでの動作も（無保証ですが）動作実績があります。
 
 ## ライセンス
-This software is released under the [MIT License, see LICENSE.txt](https://github.com/duo-inc/EasyMotionRecorder/blob/master/LICENSE.txt).
+This software is released under the [MIT License, see LICENSE.txt](https://github.com/neon-izm/EasyMotionRecorder/blob/master/LICENSE.txt).
 
-(このソフトウェアは、[MITライセンス](https://github.com/duo-inc/EasyMotionRecorder/blob/master/LICENSE.txt)のもとで公開されています。)
+(このソフトウェアは、[MITライセンス](https://github.com/neon-izm/EasyMotionRecorder/blob/master/LICENSE.txt)のもとで公開されています。)
