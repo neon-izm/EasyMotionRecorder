@@ -86,7 +86,77 @@ namespace Entum
         {
             var clip = new AnimationClip { frameRate = 30 };
             AnimationUtility.SetAnimationClipSettings(clip, new AnimationClipSettings { loopTime = false });
+    
+            var rootPositionCurveX = new AnimationCurve();
+            var rootPositionCurveY = new AnimationCurve();
+            var rootPositionCurveZ = new AnimationCurve();
+            var rootRotationCurveX = new AnimationCurve();
+            var rootRotationCurveY = new AnimationCurve();
+            var rootRotationCurveZ = new AnimationCurve();
+            var rootRotationCurveW = new AnimationCurve();
 
+            foreach (var p in Poses)
+            {
+                rootPositionCurveX.AddKey(p.Time, p.BodyRootPosition.x);
+                rootPositionCurveY.AddKey(p.Time, p.BodyRootPosition.y);
+                rootPositionCurveZ.AddKey(p.Time, p.BodyRootPosition.z);
+                rootRotationCurveX.AddKey(p.Time, p.BodyRootRotation.x);
+                rootRotationCurveY.AddKey(p.Time, p.BodyRootRotation.y);
+                rootRotationCurveZ.AddKey(p.Time, p.BodyRootRotation.z);
+                rootRotationCurveW.AddKey(p.Time, p.BodyRootRotation.w);
+            }
+
+            AnimationUtility.SetEditorCurve(clip,
+                new EditorCurveBinding
+                {
+                    path = "",
+                    type = typeof(Transform),
+                    propertyName = "m_LocalPosition.x"
+                }, rootPositionCurveX);
+            AnimationUtility.SetEditorCurve(clip,
+                new EditorCurveBinding
+                {
+                    path = "",
+                    type = typeof(Transform),
+                    propertyName = "m_LocalPosition.y"
+                }, rootPositionCurveY);
+            AnimationUtility.SetEditorCurve(clip,
+                new EditorCurveBinding
+                {
+                    path = "",
+                    type = typeof(Transform),
+                    propertyName = "m_LocalPosition.z"
+                }, rootPositionCurveZ);
+
+            AnimationUtility.SetEditorCurve(clip,
+                new EditorCurveBinding
+                {
+                    path = "",
+                    type = typeof(Transform),
+                    propertyName = "m_LocalRotation.x"
+                }, rootRotationCurveX);
+            AnimationUtility.SetEditorCurve(clip,
+                new EditorCurveBinding
+                {
+                    path = "",
+                    type = typeof(Transform),
+                    propertyName = "m_LocalRotation.y"
+                }, rootRotationCurveY);
+            AnimationUtility.SetEditorCurve(clip,
+                new EditorCurveBinding
+                {
+                    path = "",
+                    type = typeof(Transform),
+                    propertyName = "m_LocalRotation.z"
+                }, rootRotationCurveZ);
+            AnimationUtility.SetEditorCurve(clip,
+                new EditorCurveBinding
+                {
+                    path = "",
+                    type = typeof(Transform),
+                    propertyName = "m_LocalRotation.w"
+                }, rootRotationCurveW);
+    
             var bones = Poses[0].HumanoidBones;
             for (int i = 0; i < bones.Count; i++)
             {
@@ -377,7 +447,7 @@ namespace Entum
                         if (current == null) throw new Exception(target.name + "は" + root.name + "の子ではありません");
                         if (current == root) break;
 
-                        path = (path == "") ? current.name : current.name + "/" + path;
+                        path = (path == null) ? current.name : current.name + "/" + path;
 
                         current = current.parent;
                     }
