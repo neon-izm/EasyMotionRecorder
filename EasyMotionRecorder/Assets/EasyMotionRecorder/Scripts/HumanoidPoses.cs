@@ -377,7 +377,7 @@ namespace Entum
                         if (current == null) throw new Exception(target.name + "は" + root.name + "の子ではありません");
                         if (current == root) break;
 
-                        path = (path == "") ? current.name : current.name + "/" + path;
+                        path = (path == null) ? current.name : current.name + "/" + path;
 
                         current = current.parent;
                     }
